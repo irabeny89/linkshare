@@ -2,7 +2,6 @@ import { LinkCardPropsType } from "types";
 import { BiUpvote } from "react-icons/bi";
 import moment from "moment";
 import { CSSProperties } from "react";
-import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import getCompactNumberFormat from "utils/getCompactNumberFormat";

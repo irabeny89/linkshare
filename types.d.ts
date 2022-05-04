@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react";
+import { IconType } from "react-icons";
 
 type TimestampsAndId = {
   id: number;
@@ -66,7 +67,12 @@ type ErrorPropsType = {
 type LinkCardPropsType = LinkType;
 
 type FeedbackToastPropsType = {
-  error: any
-  show: boolean
-  setShow: Dispatch<SetStateAction<boolean>>
-}
+  error: any;
+  show: boolean;
+  setShow: Dispatch<SetStateAction<boolean>>;
+};
+
+type PageTitlePropsType = {
+  title: string;
+  icon?: unknown;
+};

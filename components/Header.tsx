@@ -12,16 +12,18 @@ export default function Header() {
   return (
     <header>
       <Navbar collapseOnSelect expand="sm">
-        <Navbar.Brand as="h1" className="text-danger">
-          <MdShare color="green" size={30} /> {name}
-        </Navbar.Brand>
+        <Link href="/">
+          <Navbar.Brand as="h1" className="text-danger">
+            <MdShare color="green" size={30} /> {name}
+          </Navbar.Brand>
+        </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             {pages.map(({ href, title }) => (
               <Nav.Item key={title} className="mx-3">
                 <Link passHref href={href}>
-                  {title}
+                  <Nav.Link>{title}</Nav.Link>
                 </Link>
               </Nav.Item>
             ))}
