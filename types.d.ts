@@ -12,10 +12,12 @@ type UserType = {
   password: string;
 } & TimestampsAndId;
 
-type UserVertexType = {
-  sharedLinks: Link[];
-  upvotedLinks: Link[];
-} & Omit<UserType, "password">;
+type UserVertexType = Optional<
+  {
+    sharedLinks: Link[];
+    upvotedLinks: Link[];
+  } & Omit<UserType, "password">
+>;
 
 type LinkType = {
   headline: string;
@@ -24,35 +26,42 @@ type LinkType = {
   upvoters: string[];
 } & TimestampsAndId;
 
-type LinkVertexType = LinkType;
+type LinkVertexType = Optional<LinkType>;
 
-type PagingInput = {
-  first?: number
-  after?: string
-  last?: number
-  before?: string
-  order?: "ASCEND" | "DESCEND"
-}
+type PagingInputType = {
+  first?: number;
+  after?: string;
+  last?: number;
+  before?: string;
+  order?: "ASCEND" | "DESCEND";
+};
 
 type PageInfoType = {
-  startCursor: string
-  endCursor: string
-  hasNextPage: boolean
-  hasPreviousPage: boolean
-}
+  startCursor: string;
+  endCursor: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
 
-type EdgeType<T> = {
-  cursor: string
-  node: T
-}
+type EdgeType<NodeType> = {
+  cursor: string;
+  node: NodeType;
+};
 
-type CursorConnection<EdgeType> = {
-  edges: EdgeType[]
-  pageInfo: PageInfoType
-}
+type CursorConnection<NodeType> = {
+  edges: EdgeType<NodeType>[];
+  pageInfo: PageInfoType;
+};
 
 type GraphContextType = {
   req: NextApiRequest;
   res: NextApiResponse;
 };
 
+type ErrorPropsType = {
+  type: "404" | "500";
+};
+
+type LinkCardPropsType = LinkType;
+
+type HomePagePropsType = {};

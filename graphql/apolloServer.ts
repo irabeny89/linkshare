@@ -2,27 +2,22 @@ import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled,
 } from "apollo-server-core";
-import { ApolloServer, AuthenticationError } from "apollo-server-micro";
-import type { GraphContextType } from "types";
+import { ApolloServer } from "apollo-server-micro";
 import typeDefs from "graphql/typeDefs";
+import context from "./context";
+import mocks from "./mocks";
+
+const plugins = [
+  process.env.NODE_ENV === "production"
+    ? ApolloServerPluginLandingPageDisabled()
+    : ApolloServerPluginLandingPageGraphQLPlayground(),
+];
 
 const apolloServer = new ApolloServer({
-  mocks: true,
+  mocks,
   typeDefs,
-  plugins: [
-    process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageDisabled()
-      : ApolloServerPluginLandingPageGraphQLPlayground(),
-  ],
-  context: async ({ req, res }: Pick<GraphContextType, "req" | "res">): Promise<GraphContextType> => {
-    try {
-      // authenticate user
-      // TODO: start database connection & add models to context
-      return { req, res }
-    } catch(error) {
-      throw new AuthenticationError("Not authenticated, Login or signup to continue.")
-    }
-  }
-})
+  context,
+  plugins,
+});
 
-export default apolloServer
+export default apolloServer;

@@ -1,7 +1,7 @@
 import { MdCode } from "react-icons/md";
 import config from "config";
 const {
-  siteData: { author },
+  siteData: { author, email },
 } = config;
 export default function Footer() {
   return (
@@ -9,6 +9,7 @@ export default function Footer() {
       <hr />
       {author.split(" ")[0]} <MdCode size={25} color="blue" />{" "}
       {author.split(" ")[1]}
+      <p>{email}</p>
     </footer>
   );
 }
