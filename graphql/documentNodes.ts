@@ -23,6 +23,9 @@ export const LINKS = gql`
           ...LinkFields
         }
       }
+      pageInfo {
+        hasNextPage
+      }
     }
   }
 `;

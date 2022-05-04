@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { Dispatch, SetStateAction } from "react"
 
 type TimestampsAndId = {
   id: number;
@@ -64,4 +65,8 @@ type ErrorPropsType = {
 
 type LinkCardPropsType = LinkType;
 
-type HomePagePropsType = {};
+type FeedbackToastPropsType = {
+  error: any
+  show: boolean
+  setShow: Dispatch<SetStateAction<boolean>>
+}

@@ -11,7 +11,7 @@ const {
 export default function Header() {
   return (
     <header>
-      <Navbar collapseOnSelect expand="md">
+      <Navbar collapseOnSelect expand="sm">
         <Navbar.Brand as="h1" className="text-danger">
           <MdShare color="green" size={30} /> {name}
         </Navbar.Brand>

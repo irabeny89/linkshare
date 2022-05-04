@@ -7,6 +7,7 @@ const config = {
       serverDown:
         "Something went wrong. Try again later or contact the developer. Contact in the footer below.",
       pageNotFound: "Page not found.",
+      general: "Something went wrong. Check your internet connection and try again."
     },
     pages: [
       {
