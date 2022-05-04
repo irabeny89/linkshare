@@ -3,7 +3,7 @@ import cache from "./cache";
 
 const apolloClient = new ApolloClient({
   cache,
-  uri: "/api/graphql"
+  uri: "http://localhost:3000/api/graphql"
 })
 
 export default apolloClient
