@@ -36,6 +36,7 @@
     "@babel/core": "^7.17.9",
     "eslint": "^8.14.0",
     "eslint-config-next": "^12.1.5",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "webpack": "^5.72.0"
   }
 }

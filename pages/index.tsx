@@ -24,32 +24,27 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
   loading: () => <>loading...</>,
 });
 
-export const getStaticProps: GetStaticProps = async () => {
-  const { error, data } = await apolloClient.query<
-    Record<"links", CursorConnection<LinkType>>,
-    Record<"args", PagingInputType>
-  >({
-    query: LINKS,
-    variables: { args: { first: 25 } },
-    fetchPolicy: "no-cache",
-  });
+// export const getStaticProps: GetStaticProps = async () => {
+//   const { error, data } = await apolloClient.query<
+//     Record<"links", CursorConnection<LinkType>>,
+//     Record<"args", PagingInputType>
+//   >({
+//     query: LINKS,
+//     variables: { args: { first: 25 } },
+//     fetchPolicy: "no-cache",
+//   });
+//   error && console.error(error);
+//   return !!data ? { props: data.links, revalidate: 5 } : { notFound: true };
+// };
 
-  return !!data
-    ? { props: data.links, revalidate: 5 }
-    : (console.error(error), { notFound: true });
-};
-
-export default function HomePage({
-  edges,
-  pageInfo: { hasNextPage, endCursor },
-}: CursorConnection<LinkType>) {
+export default function HomePage() {
   const [showToast, setShowToast] = useState(false);
 
   const [fetchLinks, { loading, error, data, fetchMore }] = useLazyQuery<
     Record<"links", CursorConnection<LinkType>>,
     Record<"args", PagingInputType>
   >(LINKS, {
-    variables: { args: { first: 25, after: endCursor } },
+    variables: { args: { first: 25 } },
   });
 
   const handleMoreLinks = () =>
@@ -61,7 +56,7 @@ export default function HomePage({
         })
       : fetchLinks();
 
-  const linkEdges = edges.concat(data?.links?.edges ?? []);
+  // const linkEdges = edges.concat(data?.links?.edges ?? []);
 
   return (
     <>
@@ -77,8 +72,8 @@ export default function HomePage({
         </div>
       </div>
       <Row className="my-4 justify-content-center">
-        {!!linkEdges.length ? (
-          linkEdges.map(({ node }) => (
+        {!!data?.links.edges.length ? (
+          data?.links.edges.map(({ node }) => (
             <Col sm="5" lg="4" key={node.id}>
               <LinkCard key={node.id} {...node} />
             </Col>
@@ -94,7 +89,7 @@ export default function HomePage({
         )}
       </Row>
       <FeedbackToast error={error} setShow={setShowToast} show={showToast} />
-      {hasNextPage && (
+      {data?.links.pageInfo.hasNextPage && (
         <>
           {loading ? (
             <Spinner animation="grow" />
