@@ -7,13 +7,13 @@ import apolloClient from "graphql/apolloClient";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SSRProvider>
-      <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={apolloClient}>
+      <SSRProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </ApolloProvider>
-    </SSRProvider>
+      </SSRProvider>
+    </ApolloProvider>
   );
 }
 export default MyApp;
