@@ -59,7 +59,9 @@ export default function HomePage() {
         </div>
       </div>
       <Row className="my-4 justify-content-center">
-        {!!data?.links?.edges?.length ? (
+        {loading ? (
+          <Spinner animation="border" />
+        ) : !!data?.links?.edges?.length ? (
           data?.links?.edges?.map(({ node }) => (
             <Col sm="5" lg="4" key={node.id}>
               <LinkCard {...node} />

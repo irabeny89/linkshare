@@ -11,7 +11,8 @@ export default function FeedbackToast({
 }: FeedbackToastPropsType) {
   useEffect(() => {
     setShow(!!error);
-  }, [error, setShow]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
   
   return (
     <ToastContainer position="bottom-end">
