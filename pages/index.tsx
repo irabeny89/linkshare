@@ -1,7 +1,5 @@
-import { useLazyQuery } from "@apollo/client";
-import apolloClient from "graphql/apolloClient";
+import { useQuery } from "@apollo/client";
 import { LINKS } from "graphql/documentNodes";
-import { GetStaticProps } from "next";
 import type { CursorConnection, LinkType, PagingInputType } from "types";
 import {
   MdHome,
@@ -21,42 +19,30 @@ import PageTitle from "components/PageTitle";
 import Link from "next/link";
 
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
-  loading: () => <>loading...</>,
-});
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const { error, data } = await apolloClient.query<
-//     Record<"links", CursorConnection<LinkType>>,
-//     Record<"args", PagingInputType>
-//   >({
-//     query: LINKS,
-//     variables: { args: { first: 25 } },
-//     fetchPolicy: "no-cache",
-//   });
-//   error && console.error(error);
-//   return !!data ? { props: data.links, revalidate: 5 } : { notFound: true };
-// };
+    loading: () => <>loading...</>,
+  }),
+  AddLinkModal = dynamic(() => import("components/AddLinkModal"), {
+    loading: () => <>loading...</>,
+  });
 
 export default function HomePage() {
-  const [showToast, setShowToast] = useState(false);
+  const [showToast, setShowToast] = useState(false),
+    [showModal, setShowModal] = useState(false);
 
-  const [fetchLinks, { loading, error, data, fetchMore }] = useLazyQuery<
+  const { loading, error, data, fetchMore } = useQuery<
     Record<"links", CursorConnection<LinkType>>,
     Record<"args", PagingInputType>
   >(LINKS, {
     variables: { args: { first: 25 } },
+    notifyOnNetworkStatusChange: true,
   });
 
   const handleMoreLinks = () =>
-    data
-      ? fetchMore({
-          variables: {
-            args: { first: 25, after: data?.links.pageInfo.endCursor },
-          },
-        })
-      : fetchLinks();
-
-  // const linkEdges = edges.concat(data?.links?.edges ?? []);
+    fetchMore({
+      variables: {
+        args: { first: 25, after: data?.links?.pageInfo?.endCursor },
+      },
+    });
 
   return (
     <>
@@ -65,17 +51,18 @@ export default function HomePage() {
         <h3 className="my-4">
           <MdDynamicFeed size={35} /> Feed
         </h3>
+        <AddLinkModal show={showModal} setShow={setShowModal} />
         <div className="my-4">
-          <Button>
-            <MdAddLink size={35} /> Add Link
+          <Button onClick={() => setShowModal(true)}>
+            <MdAddLink size={35} /> Share Link
           </Button>
         </div>
       </div>
       <Row className="my-4 justify-content-center">
-        {!!data?.links.edges.length ? (
-          data?.links.edges.map(({ node }) => (
+        {!!data?.links?.edges?.length ? (
+          data?.links?.edges?.map(({ node }) => (
             <Col sm="5" lg="4" key={node.id}>
-              <LinkCard key={node.id} {...node} />
+              <LinkCard {...node} />
             </Col>
           ))
         ) : (
@@ -89,7 +76,7 @@ export default function HomePage() {
         )}
       </Row>
       <FeedbackToast error={error} setShow={setShowToast} show={showToast} />
-      {data?.links.pageInfo.hasNextPage && (
+      {data?.links?.pageInfo?.hasNextPage && (
         <>
           {loading ? (
             <Spinner animation="grow" />

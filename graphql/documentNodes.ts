@@ -25,6 +25,7 @@ export const LINKS = gql`
       }
       pageInfo {
         hasNextPage
+        endCursor
       }
     }
   }
