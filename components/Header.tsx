@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <header>
       <Navbar collapseOnSelect expand="sm">
-        <Link href="/">
+        <Link passHref href="/">
           <Navbar.Brand as="h1" className="text-danger">
             <MdShare color="green" size={30} /> {name}
           </Navbar.Brand>

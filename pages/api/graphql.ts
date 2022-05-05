@@ -6,7 +6,7 @@ export const config = { api: { bodyParser: false } };
 
 const server = apolloServer.start();
 
-export default async function (req: MicroRequest, res: NextApiResponse) {
+export default async function handler (req: MicroRequest, res: NextApiResponse) {
   if (req.method === "OPTIONS") {
     return res.send("ok");
   }

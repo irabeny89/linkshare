@@ -11,7 +11,7 @@ export default function FeedbackToast({
 }: FeedbackToastPropsType) {
   useEffect(() => {
     setShow(!!error);
-  }, [error]);
+  }, [error, setShow]);
   
   return (
     <ToastContainer position="bottom-end">
