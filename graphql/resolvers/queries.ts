@@ -1,6 +1,6 @@
 import { ForbiddenError, ApolloError } from "apollo-server-micro";
 import { JwtPayload } from "jsonwebtoken";
-import { GraphContextType, LinkModelType, PagingInputType } from "types";
+import { GraphContextType, LinkModelType, PagingInputType, UserNodeType } from "types";
 import {
   devlog,
   getAuthPayload,
@@ -18,7 +18,7 @@ const {
 } = config;
 
 const Query = {
-  me: async (_: any, __: any, { User, accessToken }: GraphContextType) => {
+  me: async (_: any, __: any, { User, accessToken }: GraphContextType): Promise<UserNodeType | undefined> => {
     try {
       const payload = await getAuthPayload(accessToken);
 
@@ -31,8 +31,8 @@ const Query = {
       );
 
       const { sub } = payload as JwtPayload,
-        user = await User.findByPk(sub);
-
+        user = await User.findByPk(sub, { include: ["links", "upvotes"] });
+        
       return user;
     } catch (error: any) {
       devlog(error);

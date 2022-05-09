@@ -30,7 +30,7 @@ type LinkModelType = LinkInputType &
   TimestampsAndIdType &
   Partial<Record<"userId", string>>;
 
-type UpvoteModelType = Partial<"userId" | "linkId", string> &
+type UpvoteModelType = Partial<Record<"userId" | "linkId", string>> &
   TimestampsAndIdType;
 
 type LinkNodeType = Required<TimestampsAndIdType> &

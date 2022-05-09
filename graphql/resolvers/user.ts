@@ -1,7 +1,7 @@
 import _User from "@/models/User";
 import { ApolloError } from "apollo-server-micro";
 import config from "config";
-import { GraphContextType, LinkModelType, PagingInputType } from "types";
+import { GraphContextType, LinkModelType, PagingInputType, UpvoteModelType } from "types";
 import { devlog, getCursorConnection, handleErrorInline } from "utils/";
 
 const {
@@ -36,7 +36,7 @@ const User = {
     try {
       const list = (await Upvote.findAll({
         where: { userId },
-      })) as unknown as Required<LinkModelType>[];
+      })) as unknown as Required<UpvoteModelType>[];
 
       return getCursorConnection({ list, ...args });
     } catch (error) {

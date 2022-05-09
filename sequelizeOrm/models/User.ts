@@ -1,18 +1,21 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "sequelizeOrm";
 import { sign } from "jsonwebtoken";
-import { UserModelType } from "types";
+import { LinkModelType, UpvoteModelType, UserModelType } from "types";
 import Link from "./Link";
 import Upvote from "./Upvote";
 import config from "config";
 import { randomBytes, createHmac } from "crypto";
 
 class User extends Model<UserModelType> {
+  name!: string;
   email!: string;
   password!: string;
   id!: string;
   hashedPassword!: string;
   salt!: string;
+  links!: Required<LinkModelType>[];
+  upvotes!: Required<UpvoteModelType>[];
   async getAccessToken() {
     return sign({ email: this.email }, config.environmentVariable.secret, {
       audience: "user",
