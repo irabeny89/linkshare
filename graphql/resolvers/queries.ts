@@ -1,15 +1,19 @@
-import {
-  ForbiddenError,
-  ApolloError,
-} from "apollo-server-micro";
+import { ForbiddenError, ApolloError } from "apollo-server-micro";
 import { JwtPayload } from "jsonwebtoken";
-import { GraphContextType } from "types";
-import { devlog, getAuthPayload, handleErrorInline } from "utils/";
+import { GraphContextType, LinkModelType, PagingInputType } from "types";
+import {
+  devlog,
+  getAuthPayload,
+  getCursorConnection,
+  handleErrorInline,
+} from "utils/";
 import config from "config";
 
 const {
   siteData: {
-    error: { server: { general } },
+    error: {
+      server: { general },
+    },
   },
 } = config;
 
@@ -34,6 +38,16 @@ const Query = {
       devlog(error);
       if (error.name === "ForbiddenError") throw error;
       handleErrorInline(!!error, ApolloError, general);
+    }
+  },
+  links: async (_: any, args: PagingInputType, { Link }: GraphContextType) => {
+    try {
+      const list =
+        (await Link.findAll()) as unknown as Required<LinkModelType>[];
+
+      return getCursorConnection({ list, ...args });
+    } catch (error) {
+      devlog(error);
     }
   },
 };
