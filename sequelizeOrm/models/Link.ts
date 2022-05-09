@@ -15,6 +15,4 @@ const Link = sequelize.define<Model<LinkModelType, TimestampsAndIdType>>(
 Link.hasMany(Upvote);
 Upvote.belongsTo(Link);
 
-(async () => await Link.sync())();
-
 export default Link;

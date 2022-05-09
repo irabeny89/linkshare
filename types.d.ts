@@ -1,3 +1,6 @@
+import User from "@/models/User";
+import Link from "@/models/Link";
+import Upvote from "@/models/Upvote";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Dispatch, SetStateAction } from "react";
 import { IconType } from "react-icons";
@@ -7,40 +10,51 @@ type UseStateType = {
   setShow: Dispatch<SetStateAction<boolean>>;
 };
 
-type TimestampsAndId = {
-  id: number;
-  created_at?: string;
-  updated_at?: string;
+type SearchAbleFieldType = Partial<Record<"name" | "headline", string>>;
+
+type TimestampsAndIdType = {
+  id?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 };
+
+type SignupInputType = Record<"name" | "email" | "password", string>;
+
+type HashType = Partial<Record<"hashedPassword" | "salt", string>>;
+
+type UserModelType = SignupInputType & HashType & TimestampsAndIdType;
+
+type LinkInputType = Record<"url" | "headline", string>;
+
+type LinkModelType = LinkInputType &
+  TimestampsAndIdType &
+  Partial<Record<"userId", string>>;
+
+type UpvoteModelType = Partial<"userId" | "linkId", string> &
+  TimestampsAndIdType;
+
+type LinkNodeType = Required<TimestampsAndIdType> &
+  LinkInputType &
+  Record<"poster", UserNodeType> &
+  Record<"upvoters", string[]>;
+
+type UserNodeType = Omit<SignupInputType, "password"> &
+  Required<TimestampsAndIdType> &
+  Record<"sharedLinks" | "upvotedLinks", CursorConnection<LinkNodeType>>;
 
 type UserType = {
   name: string;
   email: string;
   password: string;
-} & TimestampsAndId;
-
-type UserVertexType = Optional<
-  {
-    sharedLinks: Link[];
-    upvotedLinks: Link[];
-  } & Omit<UserType, "password">
->;
-
-type LinkType = {
-  headline: string;
-  url: string;
-  poster: UserType;
-  upvoters: string[];
-} & TimestampsAndId;
-
-type LinkVertexType = Optional<LinkType>;
+  salt: string;
+} & TimestampsAndIdType;
 
 type PagingInputType = {
   first?: number;
   after?: string;
   last?: number;
   before?: string;
-  order?: "ASCEND" | "DESCEND";
+  search?: string;
 };
 
 type PageInfoType = {
@@ -51,18 +65,20 @@ type PageInfoType = {
 };
 
 type EdgeType<NodeType> = {
-  cursor: string;
+  cursor: string | Date;
   node: NodeType;
 };
 
-type CursorConnection<NodeType> = {
+type CursorConnectionType<NodeType> = {
   edges: EdgeType<NodeType>[];
   pageInfo: PageInfoType;
 };
 
 type GraphContextType = {
-  req: NextApiRequest;
-  res: NextApiResponse;
+  accessToken?: string;
+  User: typeof User;
+  Link: typeof Link;
+  Upvote: typeof Upvote;
 };
 
 type ErrorPropsType = {
@@ -80,4 +96,4 @@ type PageTitlePropsType = {
   icon?: unknown;
 };
 
-type AddLinkModalPropsType = UseStateType
+type AddLinkModalPropsType = UseStateType;

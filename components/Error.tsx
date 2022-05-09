@@ -10,8 +10,8 @@ export default function Error({ type }: ErrorPropsType) {
         {type === "404" && <>4xx - Client Error</>}
         {type === "500" && <>5xx - Server Error</>}
       </Alert.Heading>
-      {type === "404" && <p>{config.siteData.error.pageNotFound}</p>}
-      {type === "500" && <p>{config.siteData.error.serverDown}</p>}
+      {type === "404" && <p>{config.siteData.error.client.pageNotFound}</p>}
+      {type === "500" && <p>{config.siteData.error.client.serverDown}</p>}
       <MdError size={100} />
     </Alert>
   );

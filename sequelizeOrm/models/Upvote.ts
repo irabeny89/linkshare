@@ -12,6 +12,4 @@ const Upvote = sequelize.define<Model<UpvoteModelType, TimestampsAndIdType>>("up
   // linkId: { type: DataTypes.UUID, allowNull: false, references: "link" },
 });
 
-(async () => await Upvote.sync())();
-
 export default Upvote;

@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { LINKS } from "graphql/documentNodes";
-import type { CursorConnection, LinkType, PagingInputType } from "types";
+import type { CursorConnection, LinkNodeType, PagingInputType } from "types";
 import {
   MdHome,
   MdMore,
@@ -30,7 +30,7 @@ export default function HomePage() {
     [showModal, setShowModal] = useState(false);
 
   const { loading, error, data, fetchMore } = useQuery<
-    Record<"links", CursorConnection<LinkType>>,
+    Record<"links", CursorConnection<LinkNodeType>>,
     Record<"args", PagingInputType>
   >(LINKS, {
     variables: { args: { first: 25 } },

@@ -1,19 +1,19 @@
-import { ContextFunction, AuthenticationError } from "apollo-server-core";
+import { ContextFunction } from "apollo-server-core";
 import { GraphContextType } from "types";
+import User from "@/models/User";
+import Link from "@/models/Link";
+import Upvote from "@/models/Upvote";
+import { NextApiRequest } from "next";
 
 const context: object | ContextFunction<any, object> | undefined = async ({
-  req,
-  res,
-}: Pick<GraphContextType, "req" | "res">): Promise<GraphContextType> => {
-  try {
-    // authenticate user
-    // TODO: start database connection & add models to context
-    return { req, res };
-  } catch (error) {
-    throw new AuthenticationError(
-      "Not authenticated, Login or signup to continue."
-    );
-  }
-};
+  req: {
+    headers: { authorization },
+  },
+}: Record<"req", NextApiRequest>): Promise<GraphContextType> => ({
+  accessToken: authorization?.replace("Bearer ", ""),
+  User,
+  Link,
+  Upvote,
+});
 
-export default context
+export default context;

@@ -4,7 +4,7 @@ import moment from "moment";
 import { CSSProperties } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import getCompactNumberFormat from "utils/getCompactNumberFormat";
+import { getCompactNumberFormat } from "utils/";
 
 const cardStyle: CSSProperties = { maxWidth: 360 };
 

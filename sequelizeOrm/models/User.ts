@@ -1,15 +1,18 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "sequelizeOrm";
 import { sign } from "jsonwebtoken";
-import { TimestampsAndIdType, UserModelType } from "types";
+import { UserModelType } from "types";
 import Link from "./Link";
 import Upvote from "./Upvote";
 import config from "config";
 import { randomBytes, createHmac } from "crypto";
 
-class User extends Model<UserModelType, TimestampsAndIdType> {
+class User extends Model<UserModelType> {
   email!: string;
+  password!: string;
   id!: string;
+  hashedPassword!: string;
+  salt!: string;
   async getAccessToken() {
     return sign({ email: this.email }, config.environmentVariable.secret, {
       audience: "user",
@@ -27,33 +30,42 @@ User.init(
       primaryKey: true,
     },
     name: { type: DataTypes.STRING, allowNull: false },
-    email: { type: DataTypes.STRING, allowNull: false },
-    password: { type: DataTypes.VIRTUAL, allowNull: false },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    password: {
+      type: DataTypes.VIRTUAL,
+      allowNull: false,
+      validate: { len: [8, 20] },
+    },
     hashedPassword: {
       type: DataTypes.STRING,
-      defaultValue: function (this) {
-        return (
-          // @ts-ignore
-          createHmac("sha256", this.salt)
-            // @ts-ignore
-            .update(this.password)
-            .digest("hex")
-        );
-      },
     },
     salt: {
       type: DataTypes.STRING,
       defaultValue: () => randomBytes(16).toString("hex"),
     },
   },
-  { sequelize }
+  {
+    sequelize,
+    hooks: {
+      beforeCreate: (user) => {
+        user.hashedPassword = createHmac("sha256", user.salt)
+          .update(user.password)
+          .digest("hex");
+      },
+    },
+  }
 );
 
 User.hasMany(Link);
 Link.belongsTo(User);
 User.hasMany(Upvote);
 Upvote.belongsTo(User);
-
-(async () => await User.sync())();
 
 export default User;

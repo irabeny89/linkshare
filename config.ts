@@ -4,10 +4,16 @@ const config = {
     author: "Ernest Irabor",
     email: "irabeny89@gmail.com",
     error: {
-      serverDown:
-        "Something went wrong. Try again later or contact the developer. Contact in the footer below.",
-      pageNotFound: "Page not found.",
-      general: "Something went wrong. Check your internet connection and try again."
+      client: {
+        serverDown:
+          "Something went wrong. Try again later or contact the developer. Contact in the footer below.",
+        pageNotFound: "Page not found.",
+        general:
+          "Something went wrong. Check your internet connection and try again.",
+      },
+      server: {
+        general: "500 - Something went wrong, server error.",
+      },
     },
     pages: [
       {
@@ -19,6 +25,9 @@ const config = {
         href: "/member",
       },
     ],
+  },
+  environmentVariable: {
+    secret: process.env.SECRET!,
   },
 };
 

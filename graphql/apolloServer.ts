@@ -5,7 +5,9 @@ import {
 import { ApolloServer } from "apollo-server-micro";
 import typeDefs from "graphql/typeDefs";
 import context from "./context";
-import mocks from "./mocks";
+import Mutation from "./resolvers/mutations";
+import Query from "./resolvers/queries";
+import User from "./resolvers/user";
 
 const plugins = [
   process.env.NODE_ENV === "production"
@@ -14,8 +16,8 @@ const plugins = [
 ];
 
 const apolloServer = new ApolloServer({
-  mocks,
   typeDefs,
+  resolvers: { Mutation, Query, User },
   context,
   plugins,
 });

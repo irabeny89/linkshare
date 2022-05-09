@@ -64,7 +64,7 @@ const typeDefs = gql`
     "The user email address."
     email: String!
     "The list of all links shared by the user."
-    sharedLinks: LinkConnection!
+    sharedLinks(args: PagingInput!): LinkConnection!
     "The list of all links the user up-voted(liked)"
     upvotedLinks: LinkConnection!
   }

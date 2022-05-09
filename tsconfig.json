@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@/resolvers/*": ["graphql/resolvers/*"],
-      "@/api/*": ["pages/api/*"]
+      "@/models/*": ["sequelizeOrm/models/*"]
     },
     "incremental": true
   },
