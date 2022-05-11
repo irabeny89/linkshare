@@ -1,21 +1,21 @@
 import { LinkCardPropsType } from "types";
 import { BiUpvote } from "react-icons/bi";
-import moment from "moment";
 import { CSSProperties } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getCompactNumberFormat } from "utils/";
 
-const cardStyle: CSSProperties = { maxWidth: 360 };
+const cardStyle: CSSProperties = { maxWidth: 360, height: 180 };
 
-export default function FeedCard({
+export default function LinkCard({
   headline,
-  poster: { name },
-  upvoters,
+  user,
+  totalUpvotes,
   url,
-  created_at,
+  createdAt,
 }: LinkCardPropsType) {
-  const upvotes = getCompactNumberFormat(upvoters.length);
+  const upvotes = getCompactNumberFormat(totalUpvotes),
+    days = getCompactNumberFormat(new Date(+createdAt!).getDay());
 
   return (
     <Card className="mt-4 mb-2 mx-2 p-3 shadow text-center" style={cardStyle}>
@@ -23,10 +23,10 @@ export default function FeedCard({
         <Card.Subtitle>{headline}</Card.Subtitle>
       </a>
       <p>
-        {name} | <BiUpvote /> {upvotes}
+        {user?.name} | <BiUpvote /> {upvotes}
       </p>
-      <div className="mb-3">Shared {moment(created_at!).fromNow()}</div>
-      <Button>
+      <div className="mb-3">Shared {days} days ago</div>
+      <Button className="shadow-lg">
         <BiUpvote /> upvote
       </Button>
     </Card>

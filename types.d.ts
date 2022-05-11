@@ -20,6 +20,8 @@ type TimestampsAndIdType = {
 
 type SignupInputType = Record<"name" | "email" | "password", string>;
 
+type LoginInputType = Record<"email" | "password", string>;
+
 type HashType = Partial<Record<"hashedPassword" | "salt", string>>;
 
 type UserModelType = SignupInputType & HashType & TimestampsAndIdType;
@@ -51,8 +53,10 @@ type LinkModelType = LinkInputType &
 
 type LinkNodeType = Required<TimestampsAndIdType> &
   LinkInputType &
-  Record<"poster", UserNodeType> &
-  Record<"upvoters", string[]>;
+  Record<"user", UserNodeType> &
+  Record<"upvotersId", string[]> &
+  Record<"userId", string> &
+  Record<"totalUpvotes", number>;
 
 type LinkRecordType = Required<LinkModelType>;
 
@@ -99,7 +103,7 @@ type ErrorPropsType = {
   type: "404" | "500";
 };
 
-type LinkCardPropsType = LinkType;
+type LinkCardPropsType = Partial<LinkNodeType>;
 
 type FeedbackToastPropsType = {
   error: any;
@@ -110,4 +114,6 @@ type PageTitlePropsType = {
   icon?: unknown;
 };
 
-type AddLinkModalPropsType = UseStateType;
+type ShareLinkModalPropsType = UseStateType;
+
+type ShareLinkFormPropsType = Record<"setShowModal", UseStateType["setShow"]>;

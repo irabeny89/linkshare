@@ -3,6 +3,7 @@ const config = {
     name: "LinkShare",
     author: "Ernest Irabor",
     email: "irabeny89@gmail.com",
+    ACCESS_TOKEN_KEY: "linkShareAccessToken",
     error: {
       client: {
         serverDown:

@@ -13,7 +13,6 @@ specifiers:
   graphql: ^16.4.0
   jsonwebtoken: ^8.5.1
   micro: ^9.3.4
-  moment: ^2.29.1
   next: ^12.1.5
   react: ^18.1.0
   react-bootstrap: ^2.3.1
@@ -33,7 +32,6 @@ dependencies:
   graphql: 16.4.0
   jsonwebtoken: 8.5.1
   micro: 9.3.4
-  moment: 2.29.1
   next: 12.1.5_001a3213be6019b6046daddd80c79ee1
   react: 18.1.0
   react-bootstrap: 2.3.1_react-dom@18.1.0+react@18.1.0

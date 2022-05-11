@@ -5,12 +5,13 @@ const LINKFIELDS = gql`
     id
     headline
     url
-    poster {
+    user {
       id
       name
     }
-    upvoters
-    created_at
+    upvotersId
+    totalUpvotes
+    createdAt
   }
 `;
 
@@ -24,9 +25,15 @@ export const LINKS = gql`
         }
       }
       pageInfo {
+        startCursor
         hasNextPage
-        endCursor
       }
     }
+  }
+`;
+
+export const SHARE_LINK = gql`
+  mutation ShareLink($url: String!, $headline: String!) {
+    shareLink(url: $url, headline: $headline)
   }
 `;

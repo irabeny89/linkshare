@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { LINKS } from "graphql/documentNodes";
-import type { CursorConnection, LinkNodeType, PagingInputType } from "types";
+import type { CursorConnectionType, LinkNodeType, PagingInputType } from "types";
 import {
   MdHome,
   MdMore,
@@ -21,7 +21,7 @@ import Link from "next/link";
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
     loading: () => <>loading...</>,
   }),
-  AddLinkModal = dynamic(() => import("components/AddLinkModal"), {
+  ShareLinkModal = dynamic(() => import("components/ShareLinkModal"), {
     loading: () => <>loading...</>,
   });
 
@@ -30,7 +30,7 @@ export default function HomePage() {
     [showModal, setShowModal] = useState(false);
 
   const { loading, error, data, fetchMore } = useQuery<
-    Record<"links", CursorConnection<LinkNodeType>>,
+    Record<"links", CursorConnectionType<LinkNodeType>>,
     Record<"args", PagingInputType>
   >(LINKS, {
     variables: { args: { first: 25 } },
@@ -51,7 +51,7 @@ export default function HomePage() {
         <h3 className="my-4">
           <MdDynamicFeed size={35} /> Feed
         </h3>
-        <AddLinkModal show={showModal} setShow={setShowModal} />
+        <ShareLinkModal show={showModal} setShow={setShowModal} />
         <div className="my-4">
           <Button onClick={() => setShowModal(true)}>
             <MdAddLink size={35} /> Share Link

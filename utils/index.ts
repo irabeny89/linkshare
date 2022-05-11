@@ -21,7 +21,7 @@ const {
   },
 } = config;
 
-export const getCompactNumberFormat = (value: number) =>
+export const getCompactNumberFormat = (value: number = 0) =>
   Intl.NumberFormat("en-US", { notation: "compact" }).format(value);
 
 export const devlog = (error: any) =>
