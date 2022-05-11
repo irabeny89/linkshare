@@ -1,7 +1,8 @@
-import { ApolloError } from "apollo-server-core";
+import { ApolloError, AuthenticationError } from "apollo-server-micro";
 import {
   GraphContextType,
   LinkRecordType,
+  LoginInputType,
   PagingInputType,
   UpvoteModelType,
   UserRecordType,
@@ -12,9 +13,30 @@ import {
   handleErrorInline,
   handleErrorThrows,
 } from "utils/";
-import moment from "moment";
 
 const Query = {
+  login: async (
+    _: any,
+    { email, password }: LoginInputType,
+    { User }: GraphContextType
+  ) => {
+    try {
+      const authErrorMessage = "Un-authentic request. Register or try again.",
+        user = await User.findOne({
+          where: { email },
+        });
+
+      handleErrorInline(
+        !user?.isValidPassword(password),
+        AuthenticationError,
+        authErrorMessage
+      );
+
+      return await user?.getAccessToken();
+    } catch (error) {
+      handleErrorThrows(error, "AuthenticationError");
+    }
+  },
   me: async (_: any, __: any, { User, accessToken }: GraphContextType) => {
     try {
       // authenticate
@@ -32,7 +54,7 @@ const Query = {
         ...user,
         totalLinks: user.links.length,
         totalUpvotes: user.upvotes.length,
-        createdAt: moment(user.createdAt).fromNow(),
+        createdAt: user.createdAt,
       };
     } catch (error: any) {
       handleErrorThrows(error, "ForbiddenError", "ApolloError");

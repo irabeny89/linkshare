@@ -3,7 +3,7 @@ import { gql } from "apollo-server-micro";
 const typeDefs = gql`
   type Query {
     "Login as an authenticated user and get an access token."
-    login(email: String, password: String!): String!
+    login(email: String!, password: String!): String!
     "Get information about the current user."
     me: User!
     "Get links based on parameters."
