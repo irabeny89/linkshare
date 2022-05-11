@@ -1,53 +1,69 @@
-import { ForbiddenError, ApolloError } from "apollo-server-micro";
-import { JwtPayload } from "jsonwebtoken";
-import { GraphContextType, LinkModelType, PagingInputType, UserNodeType } from "types";
+import { ApolloError } from "apollo-server-core";
 import {
-  devlog,
-  getAuthPayload,
+  GraphContextType,
+  LinkRecordType,
+  PagingInputType,
+  UpvoteModelType,
+  UserRecordType,
+} from "types";
+import {
+  authenticate,
   getCursorConnection,
   handleErrorInline,
+  handleErrorThrows,
 } from "utils/";
-import config from "config";
-
-const {
-  siteData: {
-    error: {
-      server: { general },
-    },
-  },
-} = config;
+import moment from "moment";
 
 const Query = {
-  me: async (_: any, __: any, { User, accessToken }: GraphContextType): Promise<UserNodeType | undefined> => {
+  me: async (_: any, __: any, { User, accessToken }: GraphContextType) => {
     try {
-      const payload = await getAuthPayload(accessToken);
+      // authenticate
+      const { sub } = await authenticate(accessToken);
 
-      // throw error if no payload i.e unauthentic
-      handleErrorInline(!payload, ForbiddenError, "Not allowed.");
-      handleErrorInline(
-        typeof payload === "string",
-        Error,
-        "Invalid authentication payload - Payload should be object type."
-      );
+      const user = (
+        await User.findByPk(sub, { include: ["links", "upvotes"] })
+      )?.toJSON() as UserRecordType;
 
-      const { sub } = payload as JwtPayload,
-        user = await User.findByPk(sub, { include: ["links", "upvotes"] });
-        
-      return user;
+      handleErrorInline(!user, ApolloError, "User not found.");
+
+      delete user.password, delete user.salt, delete user.hashedPassword;
+
+      return {
+        ...user,
+        totalLinks: user.links.length,
+        totalUpvotes: user.upvotes.length,
+        createdAt: moment(user.createdAt).fromNow(),
+      };
     } catch (error: any) {
-      devlog(error);
-      if (error.name === "ForbiddenError") throw error;
-      handleErrorInline(!!error, ApolloError, general);
+      handleErrorThrows(error, "ForbiddenError", "ApolloError");
     }
   },
-  links: async (_: any, args: PagingInputType, { Link }: GraphContextType) => {
+  links: async (
+    _: any,
+    { args }: Record<"args", PagingInputType>,
+    { Link }: GraphContextType
+  ) => {
     try {
-      const list =
-        (await Link.findAll()) as unknown as Required<LinkModelType>[];
+      const list = (
+        await Link.findAll({
+          include: ["user", "upvotes"],
+        })
+      ).map((rawLink) => {
+        const link = rawLink.toJSON() as LinkRecordType &
+          Record<"upvotes", UpvoteModelType[]> &
+          Record<
+            "user",
+            Omit<UserRecordType, "links" | "upvotes" | "password">
+          >;
+
+        delete link.user.hashedPassword, delete link.user.salt;
+
+        return { ...link, totalUpvotes: link.upvotes.length };
+      });
 
       return getCursorConnection({ list, ...args });
     } catch (error) {
-      devlog(error);
+      handleErrorThrows(error, "ForbiddenError");
     }
   },
 };

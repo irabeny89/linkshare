@@ -1,6 +1,14 @@
-import { UserInputError, ApolloError } from "apollo-server-micro";
-import { GraphContextType, SignupInputType } from "types";
-import { devlog, handleErrorInline } from "utils/";
+import {
+  UserInputError,
+  ValidationError,
+} from "apollo-server-micro";
+import { GraphContextType, LinkInputType, SignupInputType } from "types";
+import {
+  authenticate,
+  devlog,
+  handleErrorInline,
+  handleErrorThrows,
+} from "utils/";
 
 const Mutation = {
   signup: async (_: any, args: SignupInputType, { User }: GraphContextType) => {
@@ -9,18 +17,58 @@ const Mutation = {
 
       return await user.getAccessToken();
     } catch (error: any) {
-      devlog(error);
+      devlog(error),
+        handleErrorInline(
+          !!error,
+          UserInputError,
+          "Check your inputs, they are invalid."
+        );
+    }
+  },
+  shareLink: async (
+    _: any,
+    args: LinkInputType,
+    { Link, accessToken }: GraphContextType
+  ): Promise<undefined | string> => {
+    try {
+      const { sub: userId } = await authenticate(accessToken);
+      // @ts-ignore
+      const { id } = await Link.create({ ...args, userId });
+
+      return `Link shared with id ${id}.`;
+    } catch (error: any) {
+      const validationError = error.errors[0];
       handleErrorInline(
-        error.name === "TypeError",
-        ApolloError,
-        "Oops :(. Server error."
+        validationError,
+        ValidationError,
+        validationError.message
       );
-      // throw for other errors
+      handleErrorThrows(error, "ForbiddenError", "Error");
+    }
+  },
+  upvote: async (
+    _: any,
+    { linkId }: Record<"linkId", string>,
+    { Upvote, accessToken }: GraphContextType
+  ) => {
+    try {
+      const { sub: userId } = await authenticate(accessToken),
+        upvoted = await Upvote.findOne({
+          where: { linkId, userId },
+        });
+
       handleErrorInline(
-        !!error,
-        UserInputError,
-        "Check your inputs, they are invalid."
+        upvoted,
+        Error,
+        "Upvoted before; cannot upvote twice."
       );
+
+      // @ts-ignore
+      const { id } = await Upvote.create({ userId, linkId });
+
+      return `Link upvoted with id ${id}.`;
+    } catch (error) {
+      handleErrorThrows(error, "ForbiddenError", "Error");
     }
   },
 };

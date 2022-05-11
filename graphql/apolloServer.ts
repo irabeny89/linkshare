@@ -8,6 +8,7 @@ import context from "./context";
 import Mutation from "./resolvers/mutations";
 import Query from "./resolvers/queries";
 import User from "./resolvers/user";
+import Link from "./resolvers/link";
 
 const plugins = [
   process.env.NODE_ENV === "production"
@@ -17,7 +18,7 @@ const plugins = [
 
 const apolloServer = new ApolloServer({
   typeDefs,
-  resolvers: { Mutation, Query, User },
+  resolvers: { Mutation, Query, User, Link },
   context,
   plugins,
 });

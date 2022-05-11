@@ -14,7 +14,7 @@ const typeDefs = gql`
     "New user sign up to be an authenticated user and get an access token."
     signup(email: String!, password: String!, name: String!): String!
     "Authenticated users can post a link and get a response message."
-    postLink(url: String!, description: String!): String!
+    shareLink(url: String!, headline: String!): String!
     "Authenticated users can up-vote a link with ID and get a response message."
     upvote(linkId: ID!): String!
   }
@@ -46,14 +46,18 @@ const typeDefs = gql`
     headline: String!
     "The link to an information."
     url: String!
+    "The id of the user who shared the link."
+    userId: String!
     "The user sharing the link."
-    poster: User!
+    user: User!
     "The list of people's ID up-voting(liking) the link information."
-    upvoters: [ID!]!
+    upvotersId: [ID!]!
+    "The total number of upvotes for this link."
+    totalUpvotes: Int!
     "The timestamp of when the link was created."
-    created_at: String!
+    createdAt: String!
     "The timestamp of when the link was updated."
-    updated_at: String!
+    updatedAt: String!
   }
 
   type User {
@@ -63,10 +67,18 @@ const typeDefs = gql`
     name: String!
     "The user email address."
     email: String!
-    "The list of all links shared by the user."
-    sharedLinks(args: PagingInput!): LinkConnection!
-    "The list of all links the user up-voted(liked)"
-    upvotedLinks: LinkConnection!
+    "The number of all links shared by the user."
+    totalLinks: Int!
+    "The link connection"
+    links(args: PagingInput!): LinkConnection!
+    "The total number of user upvoted links."
+    totalUpvotes: Int!
+    "The user upvoted links."
+    upvotedLinks(args: PagingInput!): LinkConnection!
+    "The time when the user signed up."
+    createdAt: String!
+    "The time whenthe user updated."
+    updatedAt: String!
   }
 
   type LinkEdge {

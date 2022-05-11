@@ -1,13 +1,24 @@
 import {
   CursorConnectionType,
   EdgeType,
+  HashType,
+  LinkRecordType,
+  PageableNodeType,
   PagingInputType,
   SearchAbleFieldType,
+  UserRecordType,
 } from "types";
 import config from "config";
+import { ApolloError, ForbiddenError } from "apollo-server-micro";
+import { JwtPayload } from "jsonwebtoken";
 
 const {
   environmentVariable: { secret },
+  siteData: {
+    error: {
+      server: { general },
+    },
+  },
 } = config;
 
 export const getCompactNumberFormat = (value: number) =>
@@ -24,12 +35,6 @@ export const handleErrorInline = (
   if (truthy) throw new ErrorClass(errorMessage);
 };
 
-export const getAuthPayload = async (accessToken: string | undefined) =>
-  accessToken &&
-  (await import("jsonwebtoken")).verify(accessToken, secret, {
-    audience: "user" || "admin",
-  });
-
 export const searchList = <T extends SearchAbleFieldType>(
   list: T[],
   searchText: string
@@ -40,63 +45,99 @@ export const searchList = <T extends SearchAbleFieldType>(
       item?.headline?.toLowerCase().includes(searchText.toLowerCase())
   );
 
-export const getCursorConnection = <
-  T extends Record<"createdAt", Date | string> & SearchAbleFieldType
->({
+export const getForwardConnection = (
+  list: PageableNodeType[],
+  first: number,
+  after: string | Date | undefined
+) => {
+  const afterIndex = list.findIndex(({ createdAt }) => createdAt === after),
+    edges = list.slice(afterIndex + 1, first + afterIndex + 1).map((node) => ({
+      cursor: node.createdAt,
+      node,
+    })),
+    startCursor = edges[0]?.node?.createdAt ?? "",
+    endCursor = edges.reverse()[0]?.node?.createdAt ?? "",
+    hasNextPage = list.some((item) => item.createdAt > endCursor),
+    hasPreviousPage = list.some((item) => item.createdAt < startCursor);
+
+  return {
+    edges,
+    pageInfo: {
+      startCursor,
+      endCursor,
+      hasNextPage,
+      hasPreviousPage,
+    },
+  };
+};
+
+export const getBackwardConnection = (
+  list: PageableNodeType[],
+  last: number,
+  before: string | Date | undefined
+) => {
+  const beforeIndex = list.findIndex((item) => item.createdAt === before),
+    edges = list
+      .slice(
+        (beforeIndex === -1 ? 0 : beforeIndex) - last,
+        beforeIndex === -1 ? undefined : beforeIndex
+      )
+      .map((node) => ({
+        cursor: node.createdAt,
+        node,
+      })),
+    startCursor = edges[0]?.node?.createdAt ?? "",
+    endCursor = edges.reverse()[0]?.node?.createdAt ?? "",
+    hasNextPage = list.some((item) => item.createdAt > endCursor),
+    hasPreviousPage = list.some((item) => item.createdAt < startCursor);
+
+  return {
+    edges,
+    pageInfo: {
+      startCursor,
+      endCursor,
+      hasNextPage,
+      hasPreviousPage,
+    },
+  };
+};
+
+export const getCursorConnection = ({
   list,
   first,
   after,
   last,
   before,
   search,
-}: PagingInputType & Record<"list", T[]>): CursorConnectionType<T> => {
-  let edges: EdgeType<T>[] = [],
-    startCursor: Date | string = "",
-    endCursor: Date | string = "",
-    hasNextPage: boolean = false,
-    hasPreviousPage: boolean = false;
-  // if search is requested...
-  const _list = search ? searchList<T>(list, search) : list;
+}: PagingInputType & Record<"list", PageableNodeType[]>) => {
+  // searchList returns [] if list is empty
+  const _list = search ? searchList<PageableNodeType>(list, search) : list;
 
-  if (first) {
-    const afterIndex = _list.findIndex((item) => item.createdAt === after);
-    // create edges with cursor
-    edges = _list.slice(afterIndex + 1, first + afterIndex + 1).map((item) => ({
-      cursor: item.createdAt,
-      node: item,
-    }));
-    // paging info
-    startCursor = edges[0]?.node?.createdAt ?? "";
-    endCursor = edges.reverse()[0]?.node?.createdAt ?? "";
-    hasNextPage = _list.some((item) => item.createdAt > endCursor);
-    hasPreviousPage = list.some((item) => item.createdAt < startCursor);
-  }
-  if (last) {
-    const beforeIndex = _list.findIndex((item) => item.createdAt === before);
-    // create edges with cursor
-    edges = _list
-      .slice(
-        (beforeIndex === -1 ? 0 : beforeIndex) - last,
-        beforeIndex === -1 ? undefined : beforeIndex
-      )
-      .map((item) => ({
-        cursor: item.createdAt,
-        node: item,
-      }));
-    // paging info
-    startCursor = edges[0]?.node?.createdAt ?? "";
-    endCursor = edges.reverse()[0]?.node?.createdAt ?? "";
-    hasNextPage = _list.some((item) => item.createdAt > endCursor);
-    hasPreviousPage = _list.some((item) => item.createdAt < startCursor);
-  }
+  return last
+    ? getBackwardConnection(_list, last, before)
+    : getForwardConnection(_list, first!, after);
+};
 
-  return {
-    edges: edges.reverse(),
-    pageInfo: {
-      startCursor: startCursor.toString(),
-      endCursor: endCursor.toString(),
-      hasPreviousPage,
-      hasNextPage,
-    },
-  };
+export const authenticate = async (accessToken: string | undefined) => {
+  // authenticate
+  const payload =
+    accessToken &&
+    (await import("jsonwebtoken")).verify(accessToken, secret, {
+      audience: "user" || "admin",
+    });
+
+  // throw error if no payload i.e unauthentic
+  handleErrorInline(!payload, ForbiddenError, "Not allowed.");
+
+  return payload as JwtPayload;
+};
+
+export const throwErrorsFor = (error: any, ...errorNames: string[]) => {
+  if (errorNames.includes(error.name)) throw error;
+};
+
+export const handleErrorThrows = (error: any, ...errorNames: string[]) => {
+  devlog(error);
+  errorNames && throwErrorsFor(error, ...errorNames);
+  handleErrorInline(error, ApolloError, general);
 };

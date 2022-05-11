@@ -12,7 +12,7 @@ const config = {
           "Something went wrong. Check your internet connection and try again.",
       },
       server: {
-        general: "500 - Something went wrong, server error.",
+        general: "500 - Oops :(. Server error.",
       },
     },
     pages: [

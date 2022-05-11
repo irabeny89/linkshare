@@ -56,6 +56,7 @@ User.init(
   },
   {
     sequelize,
+    modelName: "user",
     hooks: {
       beforeCreate: (user) => {
         user.hashedPassword = createHmac("sha256", user.salt)

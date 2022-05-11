@@ -1,47 +1,55 @@
 import _User from "@/models/User";
-import { ApolloError } from "apollo-server-micro";
-import config from "config";
-import { GraphContextType, LinkModelType, PagingInputType, UpvoteModelType } from "types";
-import { devlog, getCursorConnection, handleErrorInline } from "utils/";
-
-const {
-  siteData: {
-    error: {
-      server: { general },
-    },
-  },
-} = config;
+import {
+  GraphContextType,
+  LinkRecordType,
+  PagingInputType,
+  UpvoteModelType,
+  UserRecordType,
+} from "types";
+import { getCursorConnection, handleErrorThrows } from "utils/";
 
 const User = {
-  sharedLinks: async (
-    { id: userId }: _User,
-    args: PagingInputType,
-    { Link }: GraphContextType
+  links: async (
+    { links: list }: _User,
+    { args }: Record<"args", PagingInputType>
   ) => {
     try {
-      const list = (await Link.findAll({
-        where: { userId },
-      })) as unknown as Required<LinkModelType>[];
-
       return getCursorConnection({ list, ...args });
     } catch (error) {
-      devlog(error);
+      handleErrorThrows(error);
     }
   },
   upvotedLinks: async (
-    { id: userId }: _User,
-    args: PagingInputType,
-    { Upvote }: GraphContextType
+    { upvotes }: _User,
+    { args }: Record<"args", PagingInputType>,
+    { Link }: GraphContextType
   ) => {
     try {
-      const list = (await Upvote.findAll({
-        where: { userId },
-      })) as unknown as Required<UpvoteModelType>[];
+      let list: (LinkRecordType &
+        Record<"user", UserRecordType> &
+        Record<"totalUpvotes", number> &
+        Record<"upvotersId", string[]>)[] = [];
+      for await (const upvote of upvotes) {
+        const link = (
+          await Link.findByPk(upvote.linkId, {
+            include: ["user", "upvotes"],
+          })
+        )?.toJSON() as LinkRecordType &
+          Record<"user", UserRecordType> &
+          Record<"upvotes", Required<UpvoteModelType>[]>;
+
+        delete link.user.hashedPassword, delete link.user.salt;
+
+        list.push({
+          ...link,
+          totalUpvotes: link.upvotes.length,
+          upvotersId: link.upvotes.map(({ userId }) => userId),
+        });
+      }
 
       return getCursorConnection({ list, ...args });
     } catch (error) {
-      devlog(error);
-      handleErrorInline(error, ApolloError, general);
+      handleErrorThrows(error);
     }
   },
 };

@@ -24,23 +24,9 @@ type HashType = Partial<Record<"hashedPassword" | "salt", string>>;
 
 type UserModelType = SignupInputType & HashType & TimestampsAndIdType;
 
-type LinkInputType = Record<"url" | "headline", string>;
-
-type LinkModelType = LinkInputType &
-  TimestampsAndIdType &
-  Partial<Record<"userId", string>>;
-
-type UpvoteModelType = Partial<Record<"userId" | "linkId", string>> &
-  TimestampsAndIdType;
-
-type LinkNodeType = Required<TimestampsAndIdType> &
-  LinkInputType &
-  Record<"poster", UserNodeType> &
-  Record<"upvoters", string[]>;
-
 type UserNodeType = Omit<SignupInputType, "password"> &
   Required<TimestampsAndIdType> &
-  Record<"sharedLinks" | "upvotedLinks", CursorConnection<LinkNodeType>>;
+  Record<"links" | "upvotes", CursorConnectionType>;
 
 type UserType = {
   name: string;
@@ -48,6 +34,34 @@ type UserType = {
   password: string;
   salt: string;
 } & TimestampsAndIdType;
+
+type UserRecordType = Partial<HashType & Pick<SignupInputType, "password">> &
+  Omit<SignupInputType, "password"> &
+  Omit<UserNodeType, "links" | "upvotes"> &
+  Record<"links" | "upvotes", Required<LinkModelType>[]>;
+
+type LinkInputType = {
+  url: string;
+  headline: string;
+};
+
+type LinkModelType = LinkInputType &
+  TimestampsAndIdType &
+  Partial<Record<"userId", string>>;
+
+type LinkNodeType = Required<TimestampsAndIdType> &
+  LinkInputType &
+  Record<"poster", UserNodeType> &
+  Record<"upvoters", string[]>;
+
+type LinkRecordType = Required<LinkModelType>;
+
+type UpvoteModelType = Partial<Record<"userId" | "linkId", string>> &
+  TimestampsAndIdType;
+
+type PageableNodeType =
+  | Omit<UserRecordType, keyof HashType | "password">
+  | LinkRecordType;
 
 type PagingInputType = {
   first?: number;

@@ -8,8 +8,6 @@ const Upvote = sequelize.define<Model<UpvoteModelType, TimestampsAndIdType>>("up
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  // userId: { type: DataTypes.UUID, allowNull: false, references: "user" },
-  // linkId: { type: DataTypes.UUID, allowNull: false, references: "link" },
 });
 
 export default Upvote;

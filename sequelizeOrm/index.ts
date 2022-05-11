@@ -6,9 +6,8 @@ const sequelize = new Sequelize({
 });
 // test database connection
 sequelize.authenticate().then(
-  () => console.log("Database connected."),
+  () => (console.log("Database connected."), sequelize.sync()),
   () => console.error("Database connection failed!")
 );
-sequelize.sync();
 
 export default sequelize;
