@@ -62,6 +62,7 @@ export default function ShareLinkForm({
             placeholder="URL"
             aria-label="URL"
             type="url"
+            name="url"
           />
         </Form.FloatingLabel>
         <Form.Control.Feedback type="invalid">
@@ -79,6 +80,7 @@ export default function ShareLinkForm({
             placeholder="Headline"
             aria-label="headline"
             minLength={8}
+            name="headline"
           />
         </Form.FloatingLabel>
         <Form.Control.Feedback type="invalid">

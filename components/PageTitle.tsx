@@ -2,13 +2,18 @@ import Button from "react-bootstrap/Button";
 import Head from "next/head";
 import { PageTitlePropsType } from "types";
 import config from "config";
+import { useEffect, useState } from "react";
 
 const {
   siteData: { ACCESS_TOKEN_KEY },
 } = config;
 
 export default function PageTitle({ title, icon }: PageTitlePropsType) {
+  const [hasAccess, setHasAccess] = useState(false);
+
   const logout = () => localStorage.removeItem(ACCESS_TOKEN_KEY);
+
+  useEffect(() => setHasAccess(!!localStorage.getItem(ACCESS_TOKEN_KEY)), []);
 
   return (
     <>
@@ -24,13 +29,15 @@ export default function PageTitle({ title, icon }: PageTitlePropsType) {
           </h2>
         </div>
         <div>
-          <Button
-            variant="outline-danger"
-            className="shadow border-2"
-            onClick={logout}
-          >
-            Logout
-          </Button>
+          {hasAccess && (
+            <Button
+              variant="outline-danger"
+              className="shadow border-2"
+              onClick={logout}
+            >
+              Logout
+            </Button>
+          )}
         </div>
       </div>
       <hr />

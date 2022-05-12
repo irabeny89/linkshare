@@ -37,3 +37,9 @@ export const SHARE_LINK = gql`
     shareLink(url: $url, headline: $headline)
   }
 `;
+
+export const LOGIN = gql`
+  query Login($email: String!, $password: String!) {
+    login(email: $email, password: $password)
+  }
+`;
