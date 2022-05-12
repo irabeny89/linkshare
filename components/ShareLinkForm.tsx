@@ -5,7 +5,7 @@ import { MdShare } from "react-icons/md";
 import { FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LinkInputType, ShareLinkFormPropsType } from "types";
-import { LINKS, SHARE_LINK } from "graphql/documentNodes";
+import { LINKS, SHARE_LINK } from "apolloGraphql/client/documentNodes";
 import dynamic from "next/dynamic";
 
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {

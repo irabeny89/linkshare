@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useLazyQuery } from "@apollo/client";
-import { LOGIN } from "graphql/documentNodes";
+import { LOGIN } from "apolloGraphql/client/documentNodes";
 import { LoginInputType } from "types";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -35,20 +35,20 @@ export default function LoginForm() {
     ) as LoginInputType;
 
     e.currentTarget.checkValidity()
-      ? (login({
+      ? login({
           variables: inputs,
-        }),
-        e.currentTarget.reset(),
-        router.push("/"))
+        })
       : e.preventDefault(),
       e.stopPropagation(),
       setValidated(true);
   };
 
-  useEffect(
-    () => localStorage.setItem(ACCESS_TOKEN_KEY, data?.login ?? ""),
-    [data?.login]
-  );
+  useEffect(() => {
+    data?.login &&
+      (localStorage.setItem(ACCESS_TOKEN_KEY, data.login ?? ""),
+      router.push("/"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.login]);
 
   return (
     <Form

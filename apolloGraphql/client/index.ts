@@ -1,9 +1,12 @@
 import { ApolloClient } from "@apollo/client";
 import cache from "./cache";
+import link from "./link";
 
 const apolloClient = new ApolloClient({
   cache,
-  uri: "http://localhost:3000/api/graphql"
-})
+  link,
+  name: "Link Share",
+  version: "v2"
+});
 
-export default apolloClient
+export default apolloClient;

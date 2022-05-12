@@ -3,8 +3,8 @@ import {
   ApolloServerPluginLandingPageDisabled,
 } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-micro";
-import typeDefs from "graphql/typeDefs";
-import context from "./context";
+import typeDefs from "apolloGraphql/server/typeDefs";
+import context from "../client/context";
 import Mutation from "./resolvers/mutations";
 import Query from "./resolvers/queries";
 import User from "./resolvers/user";

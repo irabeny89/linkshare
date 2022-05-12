@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { LINKS } from "graphql/documentNodes";
+import { LINKS } from "apolloGraphql/client/documentNodes";
 import type { CursorConnectionType, LinkNodeType, PagingInputType } from "types";
 import {
   MdHome,

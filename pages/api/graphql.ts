@@ -1,6 +1,6 @@
 import { MicroRequest } from "apollo-server-micro/dist/types";
 import { NextApiResponse } from "next";
-import apolloServer from "graphql/apolloServer";
+import apolloServer from "apolloGraphql/server";
 
 export const config = { api: { bodyParser: false } };
 

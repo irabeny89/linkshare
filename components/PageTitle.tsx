@@ -3,6 +3,7 @@ import Head from "next/head";
 import { PageTitlePropsType } from "types";
 import config from "config";
 import { useEffect, useState } from "react";
+import apolloClient from "apolloGraphql/client";
 
 const {
   siteData: { ACCESS_TOKEN_KEY },
@@ -11,7 +12,11 @@ const {
 export default function PageTitle({ title, icon }: PageTitlePropsType) {
   const [hasAccess, setHasAccess] = useState(false);
 
-  const logout = () => localStorage.removeItem(ACCESS_TOKEN_KEY);
+  const logout = () => {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    apolloClient.resetStore();
+    location.reload();
+  };
 
   useEffect(() => setHasAccess(!!localStorage.getItem(ACCESS_TOKEN_KEY)), []);
 
