@@ -1,6 +1,10 @@
 import { useQuery } from "@apollo/client";
 import { LINKS } from "apolloGraphql/client/documentNodes";
-import type { CursorConnectionType, LinkNodeType, PagingInputType } from "types";
+import type {
+  CursorConnectionType,
+  LinkNodeType,
+  PagingInputType,
+} from "types";
 import {
   MdHome,
   MdMore,
@@ -17,6 +21,11 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import PageTitle from "components/PageTitle";
 import Link from "next/link";
+import config from "config";
+
+const {
+  siteData: { ACCESS_TOKEN_KEY },
+} = config;
 
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
     loading: () => <>loading...</>,
@@ -72,7 +81,9 @@ export default function HomePage() {
             <MdShare color="red" size={300} />
             <div className="text-center display-5">
               <p>No feed yet! Be the first.</p>{" "}
-              <Link href="/member">Sign/Login</Link>
+              {!localStorage.getItem(ACCESS_TOKEN_KEY) && (
+                <Link href="/member">Sign/Login</Link>
+              )}
             </div>
           </>
         )}
