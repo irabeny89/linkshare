@@ -25,6 +25,10 @@ const config = {
         title: "Member",
         href: "/member",
       },
+      {
+        title: "Dashboard",
+        href: "/dashboard",
+      },
     ],
   },
   environmentVariable: {

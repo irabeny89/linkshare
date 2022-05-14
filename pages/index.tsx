@@ -55,7 +55,7 @@ export default function HomePage() {
 
   return (
     <>
-      <PageTitle title="home" icon={<MdHome size="35" />} />
+      <PageTitle title="Home" icon={<MdHome size="35" />} />
       <div className="d-flex justify-content-between align-content-center">
         <h3 className="my-4">
           <MdDynamicFeed size={35} /> Feed
