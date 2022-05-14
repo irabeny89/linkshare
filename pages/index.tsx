@@ -20,6 +20,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import PageTitle from "components/PageTitle";
+import Error from "components/Error";
 import Link from "next/link";
 import config from "config";
 
@@ -69,7 +70,11 @@ export default function HomePage() {
       </div>
       <Row className="my-4 justify-content-center">
         {loading ? (
-          <Spinner animation="border" />
+          error ? (
+            <Error type="500" />
+          ) : (
+            <Spinner animation="border" />
+          )
         ) : !!data?.links?.edges?.length ? (
           data?.links?.edges?.map(({ node }) => (
             <Col sm="5" lg="4" key={node.id}>
