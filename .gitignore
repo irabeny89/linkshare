@@ -36,6 +36,3 @@ debug.log
 
 # vscode debug
 .vscode**
-
-# sqlite
-./datababse/db.sqlite
