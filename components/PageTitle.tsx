@@ -3,7 +3,7 @@ import Head from "next/head";
 import { PageTitlePropsType } from "types";
 import config from "config";
 import { useEffect, useState } from "react";
-import apolloClient from "apolloGraphql/client";
+import apolloClient from "apolloGraphql/client/";
 
 const {
   siteData: { ACCESS_TOKEN_KEY },
