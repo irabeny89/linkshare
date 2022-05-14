@@ -28,7 +28,13 @@ type UserModelType = SignupInputType & HashType & TimestampsAndIdType;
 
 type UserNodeType = Omit<SignupInputType, "password"> &
   Required<TimestampsAndIdType> &
-  Record<"links" | "upvotes", CursorConnectionType>;
+  Record<"links" | "upvotedLinks", CursorConnectionType<T>> &
+  Record<"totalLinks" | "totalUpvotes", number>;
+
+type UserProfileType = Pick<
+  UserNodeType,
+  "id" | "name" | "email" | "totalLinks" | "totalUpvotes" | "createdAt"
+>;
 
 type UserType = {
   name: string;
@@ -87,8 +93,8 @@ type EdgeType<NodeType> = {
   node: NodeType;
 };
 
-type CursorConnectionType<NodeType> = {
-  edges: EdgeType<NodeType>[];
+type CursorConnectionType<T> = {
+  edges: EdgeType<T>[];
   pageInfo: PageInfoType;
 };
 

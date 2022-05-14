@@ -49,3 +49,58 @@ export const SHARE_LINK = gql`
     shareLink(url: $url, headline: $headline)
   }
 `;
+
+export const ME = gql`
+  ${LINKFIELDS}
+  query Me($linksArgs: PagingInput!, $upvotedLinksArgs: PagingInput!) {
+    me {
+      id
+      name
+      email
+      totalLinks
+      totalUpvotes
+      links(args: $linksArgs) {
+        edges {
+          node {
+            id
+            headline
+            url
+            userId
+            upvotersId
+            totalUpvotes
+            createdAt
+          }
+        }
+        pageInfo {
+          startCursor
+          hasNextPage
+        }
+      }
+      upvotedLinks(args: $upvotedLinksArgs) {
+        edges {
+          node {
+            ...LinkFields
+          }
+        }
+        pageInfo {
+          startCursor
+          hasNextPage
+        }
+      }
+      createdAt
+    }
+  }
+`;
+
+export const PROFILE = gql`
+  query Profile {
+    me {
+      id
+      name
+      email
+      totalLinks
+      totalUpvotes
+      createdAt
+    }
+  }
+`;
