@@ -4,11 +4,16 @@ import Upvote from "@/models/Upvote";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Dispatch, SetStateAction } from "react";
 import { IconType } from "react-icons";
+import { JwtPayload } from "jsonwebtoken";
 
 type UseStateType = {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
 };
+
+type AudienceType = "user" | "admin";
+
+type AuthPayloadType = Required<JwtPayload> & Record<"email", string>;
 
 type SearchAbleFieldType = Partial<Record<"name" | "headline", string>>;
 
@@ -123,3 +128,9 @@ type PageTitlePropsType = {
 type ShareLinkModalPropsType = UseStateType;
 
 type ShareLinkFormPropsType = Record<"setShowModal", UseStateType["setShow"]>;
+
+type AuthComponentType<PropsType = {}> = {
+  (PropsType): JSX.Element;
+  audiences: AudienceType[];
+  displayName: string;
+};

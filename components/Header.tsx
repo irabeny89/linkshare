@@ -3,18 +3,28 @@ import Nav from "react-bootstrap/Nav";
 import { MdShare } from "react-icons/md";
 import config from "config";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useReactiveVar } from "@apollo/client";
+import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
+import { useState, useEffect } from "react";
 
 const {
-  siteData: { name, pages, ACCESS_TOKEN_KEY },
+  siteData: { name, pages },
 } = config;
 
 export default function Header() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [permittedData, setPermittedData] = useState<typeof pages>([]);
 
-  const checkAuth = (title: string) =>
-    !isAuth && title.toLowerCase() === "dashboard";
-  useEffect(() => setIsAuth(!!localStorage.getItem(ACCESS_TOKEN_KEY)), []);
+  const authPayload = useReactiveVar(authPayloadVar);
+
+  useEffect(
+    () =>
+      setPermittedData(
+        authPayload?.sub
+          ? pages
+          : pages.filter(({ title }) => title.toLowerCase() !== "dashboard")
+      ),
+    [authPayload?.sub]
+  );
 
   return (
     <header>
@@ -27,15 +37,13 @@ export default function Header() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {pages.map(({ href, title }) =>
-              checkAuth(title) ? null : (
-                <Nav.Item key={title} className="mx-3">
-                  <Link passHref href={href}>
-                    <Nav.Link>{title}</Nav.Link>
-                  </Link>
-                </Nav.Item>
-              )
-            )}
+            {permittedData.map(({ href, title }) => (
+              <Nav.Item key={title} className="mx-3">
+                <Link passHref href={href}>
+                  <Nav.Link>{title}</Nav.Link>
+                </Link>
+              </Nav.Item>
+            ))}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

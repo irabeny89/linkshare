@@ -19,3 +19,6 @@ export default function DashboardPage() {
     </>
   );
 }
+
+DashboardPage.displayName = "dashboard";
+DashboardPage.audiences = ["user", "admin"];
