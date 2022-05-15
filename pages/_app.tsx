@@ -3,17 +3,20 @@ import type { AppProps } from "next/app";
 import { SSRProvider } from "react-bootstrap";
 import Layout from "components/Layout";
 import { ApolloProvider } from "@apollo/client";
-import apolloClient from "apolloGraphql/client";
+import apolloClient from "apolloGraphql/client/index";
+import ErrorBoundary from "components/ErrorBoundary";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={apolloClient}>
+    <ErrorBoundary>
       <SSRProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ApolloProvider client={apolloClient}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ApolloProvider>
       </SSRProvider>
-    </ApolloProvider>
+    </ErrorBoundary>
   );
 }
 export default MyApp;
