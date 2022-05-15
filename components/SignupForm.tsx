@@ -37,7 +37,7 @@ export default function SignupForm() {
         }).then(({ data, errors }) => {
           data
             ? (localStorage.setItem(ACCESS_TOKEN_KEY, data?.signup ?? ""),
-              router.push("/"))
+              router.push("/dashboard"))
             : console.error(errors);
         }))
       : e.preventDefault(),

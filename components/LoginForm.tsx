@@ -46,7 +46,7 @@ export default function LoginForm() {
   useEffect(() => {
     data?.login &&
       (localStorage.setItem(ACCESS_TOKEN_KEY, data.login ?? ""),
-      router.push("/"));
+      router.push("/dashboard"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.login]);
 
