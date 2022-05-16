@@ -53,7 +53,7 @@ export default function LinkCard({
         {user?.name} | <BiUpvote /> {upvotes}
       </p>
       <div className="mb-3">Shared {days} days ago</div>
-      {!upvotersId?.includes(authPayload?.sub!) && (
+      {upvotersId && !upvotersId.includes(authPayload?.sub!) && (
         <Button className="shadow-lg" onClick={() => upvote()}>
           <BiUpvote /> upvote
         </Button>

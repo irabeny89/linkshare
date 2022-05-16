@@ -103,6 +103,7 @@ export const MY_LINKS = gql`
             id
             headline
             url
+            upvotersId
             totalUpvotes
             createdAt
           }
@@ -121,6 +122,7 @@ export const MY_UPVOTES = gql`
   query MyUpvotes($upvotedLinksArgs: PagingInput!) {
     me {
       id
+      totalUpvotes
       upvotedLinks(args: $upvotedLinksArgs) {
         edges {
           node {
