@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { LINKS } from "apolloGraphql/client/documentNodes";
 import type {
   CursorConnectionType,
@@ -23,6 +23,7 @@ import PageTitle from "components/PageTitle";
 import Error from "components/Error";
 import Link from "next/link";
 import config from "config";
+import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
 
 const {
   siteData: { ACCESS_TOKEN_KEY },
@@ -38,6 +39,8 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
 export default function HomePage() {
   const [showToast, setShowToast] = useState(false),
     [showModal, setShowModal] = useState(false);
+
+  const authPayload = useReactiveVar(authPayloadVar)
 
   const { loading, error, data, fetchMore } = useQuery<
     Record<"links", CursorConnectionType<LinkNodeType>>,
@@ -86,7 +89,7 @@ export default function HomePage() {
             <MdShare color="red" size={300} />
             <div className="text-center display-5">
               <p>No feed yet! Be the first.</p>{" "}
-              {!localStorage.getItem(ACCESS_TOKEN_KEY) && (
+              {!authPayload?.sub && (
                 <Link href="/member">Sign/Login</Link>
               )}
             </div>

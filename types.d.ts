@@ -41,20 +41,6 @@ type UserProfileType = Pick<
   "id" | "name" | "email" | "totalLinks" | "totalUpvotes" | "createdAt"
 >;
 
-type MyLinkType = {
-  id: string;
-  name
-  email
-  links: CursorConnectionType<{
-    id: string;
-    headline: string;
-    url: string;
-    totalUpvotes: number;
-    createdAt: string;
-    updatedAt: string;
-  }>;
-};
-
 type UserType = {
   name: string;
   email: string;

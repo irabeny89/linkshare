@@ -3,13 +3,17 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useQuery } from "@apollo/client";
 import { MY_LINKS } from "apolloGraphql/client/documentNodes";
-import Error from "./Error";
-import { MyLinkType, PagingInputType } from "types";
+import { PagingInputType, UserNodeType } from "types";
 import LinkCard from "./LinkCard";
+import dynamic from "next/dynamic";
+
+const Error = dynamic(() => import("components/Error"), {
+  loading: () => <>loading...</>,
+});
 
 export default function LinkSection() {
   const { loading, error, data } = useQuery<
-    Record<"me", MyLinkType>,
+    Record<"me", Partial<UserNodeType>>,
     Record<"linksArgs", PagingInputType>
   >(MY_LINKS, {
     variables: {
@@ -18,7 +22,7 @@ export default function LinkSection() {
   });
 
   const links =
-    data?.me.links.edges.map(({ node }) => ({
+    data?.me?.links?.edges.map(({ node }) => ({
       ...node,
       user: { name: "Me" },
     })) ?? [];
@@ -31,8 +35,7 @@ export default function LinkSection() {
     <Row className="d-flex justify-content-center">
       {links.map((link) => (
         <Col sm="5" lg="4" key={link.id}>
-          {/* @ts-ignore */}
-          <LinkCard key={link.id} {...link} />
+          <LinkCard {...link} />
         </Col>
       ))}
     </Row>
