@@ -22,12 +22,7 @@ import dynamic from "next/dynamic";
 import PageTitle from "components/PageTitle";
 import Error from "components/Error";
 import Link from "next/link";
-import config from "config";
 import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
-
-const {
-  siteData: { ACCESS_TOKEN_KEY },
-} = config;
 
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
     loading: () => <>loading...</>,
@@ -37,8 +32,7 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
   });
 
 export default function HomePage() {
-  const [showToast, setShowToast] = useState(false),
-    [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const authPayload = useReactiveVar(authPayloadVar)
 
