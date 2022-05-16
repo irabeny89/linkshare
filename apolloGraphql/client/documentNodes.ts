@@ -32,21 +32,9 @@ export const LINKS = gql`
   }
 `;
 
-export const SIGN_UP = gql`
-  mutation Signup($name: String!, $email: String!, $password: String!) {
-    signup(email: $email, password: $password, name: $name)
-  }
-`;
-
 export const LOGIN = gql`
   query Login($email: String!, $password: String!) {
     login(email: $email, password: $password)
-  }
-`;
-
-export const SHARE_LINK = gql`
-  mutation ShareLink($url: String!, $headline: String!) {
-    shareLink(url: $url, headline: $headline)
   }
 `;
 
@@ -145,5 +133,23 @@ export const MY_UPVOTES = gql`
         }
       }
     }
+  }
+`;
+
+export const SIGN_UP = gql`
+  mutation Signup($name: String!, $email: String!, $password: String!) {
+    signup(email: $email, password: $password, name: $name)
+  }
+`;
+
+export const SHARE_LINK = gql`
+  mutation ShareLink($url: String!, $headline: String!) {
+    shareLink(url: $url, headline: $headline)
+  }
+`;
+
+export const UPVOTE = gql`
+  mutation Upvote($linkId: ID!) {
+    upvote(linkId: $linkId)
   }
 `;
