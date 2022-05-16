@@ -109,8 +109,6 @@ export const MY_LINKS = gql`
   query MyLinks($linksArgs: PagingInput!) {
     me {
       id
-      name
-      email
       links(args: $linksArgs) {
         edges {
           node {
@@ -124,6 +122,26 @@ export const MY_LINKS = gql`
         pageInfo {
           startCursor
           hasNextPage
+        }
+      }
+    }
+  }
+`;
+
+export const MY_UPVOTES = gql`
+  ${LINKFIELDS}
+  query MyUpvotes($upvotedLinksArgs: PagingInput!) {
+    me {
+      id
+      upvotedLinks(args: $upvotedLinksArgs) {
+        edges {
+          node {
+            ...LinkFields
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
         }
       }
     }

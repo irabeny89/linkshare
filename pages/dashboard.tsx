@@ -6,8 +6,11 @@ import ProfileSection from "components/ProfileSection";
 import dynamic from "next/dynamic";
 
 const LinkSection = dynamic(() => import("components/LinkSection"), {
-  loading: () => <>loading...</>,
-});
+    loading: () => <>loading...</>,
+  }),
+  UpvoteSection = dynamic(() => import("components/UpvoteSection"), {
+    loading: () => <>loading...</>,
+  });
 
 export default function DashboardPage() {
   return (
@@ -21,7 +24,9 @@ export default function DashboardPage() {
         <Tab eventKey="links" title="Links">
           <LinkSection />
         </Tab>
-        <Tab eventKey="upvotes" title="Upvotes"></Tab>
+        <Tab eventKey="upvotes" title="Upvotes">
+          <UpvoteSection />
+        </Tab>
       </Tabs>
     </>
   );
