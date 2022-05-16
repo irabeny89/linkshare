@@ -96,7 +96,7 @@ export default function HomePage() {
           </>
         )}
       </Row>
-      <FeedbackToast error={error} setShow={setShowToast} show={showToast} />
+      <FeedbackToast error={error} />
       {data?.links?.pageInfo?.hasNextPage && (
         <>
           {loading ? (
