@@ -20,7 +20,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import PageTitle from "components/PageTitle";
-import Error from "components/Error";
 import Link from "next/link";
 import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
 
@@ -29,12 +28,15 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
   }),
   ShareLinkModal = dynamic(() => import("components/ShareLinkModal"), {
     loading: () => <>loading...</>,
+  }),
+  Error = dynamic(() => import("components/Error"), {
+    loading: () => <>loading...</>,
   });
 
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false);
 
-  const authPayload = useReactiveVar(authPayloadVar)
+  const authPayload = useReactiveVar(authPayloadVar);
 
   const { loading, error, data, fetchMore } = useQuery<
     Record<"links", CursorConnectionType<LinkNodeType>>,
@@ -83,9 +85,7 @@ export default function HomePage() {
             <MdShare color="red" size={300} />
             <div className="text-center display-5">
               <p>No feed yet! Be the first.</p>{" "}
-              {!authPayload?.sub && (
-                <Link href="/member">Sign/Login</Link>
-              )}
+              {!authPayload?.sub && <Link href="/member">Sign/Login</Link>}
             </div>
           </>
         )}
