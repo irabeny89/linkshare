@@ -118,7 +118,7 @@ type LinkCardPropsType = Partial<LinkNodeType>;
 
 type FeedbackToastPropsType = {
   error: any;
-} & UseStateType;
+};
 
 type PageTitlePropsType = {
   title: string;

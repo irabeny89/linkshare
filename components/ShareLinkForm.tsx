@@ -15,8 +15,7 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
 export default function ShareLinkForm({
   setShowModal,
 }: ShareLinkFormPropsType) {
-  const [validated, setValidated] = useState(false),
-    [showError, setShowError] = useState(false);
+  const [validated, setValidated] = useState(false);
 
   const [shareLink, { loading, error }] = useMutation<
     Record<"shareLink", string>,
@@ -44,7 +43,7 @@ export default function ShareLinkForm({
 
   return (
     <>
-      <FeedbackToast error={error} show={showError} setShow={setShowError} />
+      <FeedbackToast error={error} />
       <Form
         className="my-3"
         noValidate

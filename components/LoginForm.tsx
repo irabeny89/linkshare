@@ -19,7 +19,6 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
 
 export default function LoginForm() {
   const [validated, setValidated] = useState(false),
-    [showError, setShowError] = useState(false),
     router = useRouter();
 
   const [login, { loading, error, data }] = useLazyQuery<
@@ -57,7 +56,7 @@ export default function LoginForm() {
       validated={validated}
       onSubmit={handleLogin}
     >
-      <FeedbackToast error={error} show={showError} setShow={setShowError} />
+      <FeedbackToast error={error} />
       <Form.FloatingLabel
         placeholder="Email"
         label="Email"
