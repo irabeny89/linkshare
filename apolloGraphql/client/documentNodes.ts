@@ -104,3 +104,28 @@ export const PROFILE = gql`
     }
   }
 `;
+
+export const MY_LINKS = gql`
+  query MyLinks($linksArgs: PagingInput!) {
+    me {
+      id
+      name
+      email
+      links(args: $linksArgs) {
+        edges {
+          node {
+            id
+            headline
+            url
+            totalUpvotes
+            createdAt
+          }
+        }
+        pageInfo {
+          startCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+`;

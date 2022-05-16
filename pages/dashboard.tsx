@@ -3,6 +3,11 @@ import Tab from "react-bootstrap/Tab";
 import PageTitle from "components/PageTitle";
 import { MdDashboard } from "react-icons/md";
 import ProfileSection from "components/ProfileSection";
+import dynamic from "next/dynamic";
+
+const LinkSection = dynamic(() => import("components/LinkSection"), {
+  loading: () => <>loading...</>,
+});
 
 export default function DashboardPage() {
   return (
@@ -13,7 +18,9 @@ export default function DashboardPage() {
         <Tab eventKey="profile" title="Profile">
           <ProfileSection />
         </Tab>
-        <Tab eventKey="links" title="Links"></Tab>
+        <Tab eventKey="links" title="Links">
+          <LinkSection />
+        </Tab>
         <Tab eventKey="upvotes" title="Upvotes"></Tab>
       </Tabs>
     </>
