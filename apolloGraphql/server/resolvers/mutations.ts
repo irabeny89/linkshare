@@ -70,7 +70,7 @@ const Mutation = {
     { Link, accessToken }: GraphContextType
   ) => {
     try {
-      const { sub: userId } = await authenticate(accessToken)
+      await authenticate(accessToken)
 
       await Link.destroy({where: { id }})
 
