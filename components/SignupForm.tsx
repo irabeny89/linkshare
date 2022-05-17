@@ -38,8 +38,7 @@ export default function SignupForm() {
             ? (localStorage.setItem(ACCESS_TOKEN_KEY, data?.signup ?? ""),
               router.push("/dashboard"))
             : console.error(errors);
-        }),
-        e.currentTarget.reset())
+        }))
       : e.preventDefault(),
       e.stopPropagation(),
       setUnMatchMessage("Passwords do not match."),
