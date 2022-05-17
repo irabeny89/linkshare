@@ -11,6 +11,8 @@ type UseStateType = {
   setShow: Dispatch<SetStateAction<boolean>>;
 };
 
+type ErrorTypes = "ApolloError" | "UserInputError" | "ValidationError" | "AuthenticationError" | "ForbiddenError" | "SyntaxError" | "Error"
+
 type AudienceType = "user" | "admin";
 
 type AuthPayloadType = Required<JwtPayload> & Record<"email", string>;

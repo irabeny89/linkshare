@@ -1,6 +1,7 @@
 import {
   CursorConnectionType,
   EdgeType,
+  ErrorTypes,
   HashType,
   LinkRecordType,
   PageableNodeType,
@@ -132,11 +133,11 @@ export const authenticate = async (accessToken: string | undefined) => {
   return payload as JwtPayload;
 };
 
-export const throwErrorsFor = (error: any, ...errorNames: string[]) => {
+export const throwErrorsFor = (error: any, ...errorNames: ErrorTypes[]) => {
   if (errorNames.includes(error.name)) throw error;
 };
 
-export const handleErrorThrows = (error: any, ...errorNames: string[]) => {
+export const handleErrorThrows = (error: any, ...errorNames: ErrorTypes[]) => {
   devlog(error);
   errorNames && throwErrorsFor(error, ...errorNames);
   handleErrorInline(error, ApolloError, general);
