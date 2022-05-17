@@ -70,11 +70,26 @@ const Mutation = {
     { Link, accessToken }: GraphContextType
   ) => {
     try {
-      await authenticate(accessToken)
+      await authenticate(accessToken);
 
-      await Link.destroy({where: { id }})
+      await Link.destroy({ where: { id } });
 
-      return `Link with id ${id} deleted successfully.`
+      return `Link with id ${id} deleted successfully.`;
+    } catch (error) {
+      handleErrorThrows(error, "ForbiddenError");
+    }
+  },
+  updateLink: async (
+    _: any,
+    { headline, url, linkId: id }: Record<"linkId" | "url" | "headline", string>,
+    { Link, accessToken }: GraphContextType
+  ) => {
+    try {
+      await authenticate(accessToken);
+
+      await Link.update({ headline, url, id }, { where: { id } });
+
+      return `Link with id ${id} updated successfully.`;
     } catch (error) {
       handleErrorThrows(error, "ForbiddenError");
     }

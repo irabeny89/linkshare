@@ -19,6 +19,8 @@ const typeDefs = gql`
     upvote(linkId: ID!): String!
     "Authentic user can delete shared link."
     deleteLink(linkId: ID!): String!
+    "Authentic user can edit shared link."
+    updateLink(linkId: ID!, url: String!, headline: String!): String!
   }
 
   input PagingInput {
