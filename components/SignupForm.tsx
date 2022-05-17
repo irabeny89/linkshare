@@ -29,7 +29,7 @@ export default function SignupForm() {
       ) as SignupInputType & Record<"confirmPassword", string>,
       isSamePassword = inputs.confirmPassword === inputs.password;
 
-    e.currentTarget.checkValidity() && isSamePassword
+    isSamePassword && e.currentTarget.checkValidity()
       ? (setUnMatchMessage(""),
         signup({
           variables: inputs,
@@ -41,7 +41,7 @@ export default function SignupForm() {
         }))
       : e.preventDefault(),
       e.stopPropagation(),
-      setUnMatchMessage("Passwords do not match."),
+      !isSamePassword && setUnMatchMessage("Passwords do not match."),
       setValidated(true);
   };
 
