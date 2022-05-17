@@ -30,8 +30,7 @@ export default function SignupForm() {
       isSamePassword = inputs.confirmPassword === inputs.password;
 
     e.currentTarget.checkValidity() && isSamePassword
-      ? (e.currentTarget.reset(),
-        setUnMatchMessage(""),
+      ? (setUnMatchMessage(""),
         signup({
           variables: inputs,
         }).then(({ data, errors }) => {
@@ -39,7 +38,8 @@ export default function SignupForm() {
             ? (localStorage.setItem(ACCESS_TOKEN_KEY, data?.signup ?? ""),
               router.push("/dashboard"))
             : console.error(errors);
-        }))
+        }),
+        e.currentTarget.reset())
       : e.preventDefault(),
       e.stopPropagation(),
       setUnMatchMessage("Passwords do not match."),
@@ -120,7 +120,7 @@ export default function SignupForm() {
           required
           placeholder="Confirm Password(re-type password)"
           aria-label="confirmPassword"
-          type="confirmPassword"
+          type="password"
           minLength={8}
           name="confirmPassword"
         />
