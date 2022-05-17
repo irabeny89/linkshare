@@ -97,6 +97,7 @@ export const MY_LINKS = gql`
   query MyLinks($linksArgs: PagingInput!) {
     me {
       id
+      totalLinks
       links(args: $linksArgs) {
         edges {
           node {
