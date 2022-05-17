@@ -29,7 +29,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     // @ts-ignore
     setIsAuth(Component?.audiences?.includes(authPayload?.aud));
-  });
+    // @ts-ignore
+  }, [Component?.audiences]);
 
   return (
     <SSRProvider>
