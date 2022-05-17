@@ -1,7 +1,4 @@
-import {
-  UserInputError,
-  ValidationError,
-} from "apollo-server-micro";
+import { UserInputError, ValidationError } from "apollo-server-micro";
 import { GraphContextType, LinkInputType, SignupInputType } from "types";
 import {
   authenticate,
@@ -57,11 +54,7 @@ const Mutation = {
           where: { linkId, userId },
         });
 
-      handleErrorInline(
-        upvoted,
-        Error,
-        "Upvoted before; cannot upvote twice."
-      );
+      handleErrorInline(upvoted, Error, "Upvoted before; cannot upvote twice.");
 
       // @ts-ignore
       const { id } = await Upvote.create({ userId, linkId });
@@ -69,6 +62,21 @@ const Mutation = {
       return `Link upvoted with id ${id}.`;
     } catch (error) {
       handleErrorThrows(error, "ForbiddenError", "Error");
+    }
+  },
+  deleteLink: async (
+    _: any,
+    { linkId: id }: Record<"linkId", string>,
+    { Link, accessToken }: GraphContextType
+  ) => {
+    try {
+      const { sub: userId } = await authenticate(accessToken)
+
+      await Link.destroy({where: { id }})
+
+      return `Link with id ${id} deleted successfully.`
+    } catch (error) {
+      handleErrorThrows(error, "ForbiddenError");
     }
   },
 };

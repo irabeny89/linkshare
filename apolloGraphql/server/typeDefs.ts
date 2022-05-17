@@ -17,6 +17,8 @@ const typeDefs = gql`
     shareLink(url: String!, headline: String!): String!
     "Authenticated users can up-vote a link with ID and get a response message."
     upvote(linkId: ID!): String!
+    "Authentic user can delete shared link."
+    deleteLink(linkId: ID!): String!
   }
 
   input PagingInput {
