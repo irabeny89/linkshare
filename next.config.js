@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify: true,
   images: {
     domains: ["ipfs.io"]
   }
