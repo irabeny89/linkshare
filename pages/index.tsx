@@ -5,19 +5,12 @@ import type {
   LinkNodeType,
   PagingInputType,
 } from "types";
-import {
-  MdHome,
-  MdMore,
-  MdShare,
-  MdAddLink,
-  MdDynamicFeed,
-} from "react-icons/md";
+import { MdHome, MdMore, MdShare, MdDynamicFeed } from "react-icons/md";
 import LinkCard from "components/LinkCard";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
-import { useState } from "react";
 import dynamic from "next/dynamic";
 import PageTitle from "components/PageTitle";
 import Link from "next/link";
@@ -26,16 +19,11 @@ import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
     loading: () => <>loading...</>,
   }),
-  ShareLinkModal = dynamic(() => import("components/ShareLinkModal"), {
-    loading: () => <>loading...</>,
-  }),
   Error = dynamic(() => import("components/Error"), {
     loading: () => <>loading...</>,
   });
 
 export default function HomePage() {
-  const [showModal, setShowModal] = useState(false);
-
   const authPayload = useReactiveVar(authPayloadVar);
 
   const { loading, error, data, fetchMore } = useQuery<
@@ -56,17 +44,9 @@ export default function HomePage() {
   return (
     <>
       <PageTitle title="Home" icon={<MdHome size="35" />} />
-      <div className="d-flex justify-content-between align-content-center">
-        <h3 className="my-4">
-          <MdDynamicFeed size={35} /> Feed
-        </h3>
-        <ShareLinkModal show={showModal} setShow={setShowModal} />
-        <div className="my-4">
-          <Button onClick={() => setShowModal(true)}>
-            <MdAddLink size={35} /> Share Link
-          </Button>
-        </div>
-      </div>
+      <h3 className="my-4">
+        <MdDynamicFeed size={35} /> Feed
+      </h3>
       <Row className="my-4 justify-content-center">
         {loading ? (
           error ? (

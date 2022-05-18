@@ -1,3 +1,4 @@
+import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,13 +7,19 @@ import { MY_LINKS } from "apolloGraphql/client/documentNodes";
 import { PagingInputType, UserNodeType } from "types";
 import LinkCard from "./LinkCard";
 import dynamic from "next/dynamic";
-import { MdShare } from "react-icons/md";
+import { MdAddLink, MdShare } from "react-icons/md";
+import { useState } from "react";
 
 const Error = dynamic(() => import("components/Error"), {
-  loading: () => <>loading...</>,
-});
+    loading: () => <>loading...</>,
+  }),
+  ShareLinkModal = dynamic(() => import("components/ShareLinkModal"), {
+    loading: () => <>loading...</>,
+  });
 
 export default function LinkSection() {
+  const [showModal, setShowModal] = useState(false);
+  
   const { loading, error, data } = useQuery<
     Record<"me", Partial<UserNodeType>>,
     Record<"linksArgs", PagingInputType>
@@ -34,6 +41,12 @@ export default function LinkSection() {
     <Error type="500" />
   ) : (
     <Row className="d-flex justify-content-center">
+      <ShareLinkModal show={showModal} setShow={setShowModal} />
+      <div className="my-5">
+        <Button onClick={() => setShowModal(true)}>
+          <MdAddLink size={35} /> Share Link
+        </Button>
+      </div>
       {data?.me?.totalLinks ? (
         links.map((link) => (
           <Col sm="5" lg="4" key={link.id}>
