@@ -123,3 +123,9 @@ export const UPDATE_LINK = gql`
     updateLink(linkId: $linkId, url: $url, headline: $headline)
   }
 `;
+
+export const DELETE_LINK = gql`
+  mutation DeleteLink($linkId: ID!) {
+    deleteLink(linkId: $linkId)
+  }
+`;

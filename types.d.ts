@@ -141,6 +141,8 @@ type UpdateLinkModalPropsType = UseStateType &
   LinkInputType &
   Record<"id", string>;
 
+type DeleteLinkModalPropsType = Record<"id", string> & UseStateType;
+
 type ShareLinkFormPropsType = Record<"setShowModal", UseStateType["setShow"]>;
 
 type UpdateLinkFormPropsType = Record<"setShowModal", UseStateType["setShow"]> &

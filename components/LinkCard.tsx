@@ -1,5 +1,5 @@
 import { LinkCardPropsType } from "types";
-import { BiUpvote, BiEditAlt } from "react-icons/bi";
+import { BiUpvote, BiEditAlt, BiTrash } from "react-icons/bi";
 import { CSSProperties, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -22,6 +22,9 @@ const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
   }),
   UpdateLinkModal = dynamic(() => import("components/UpdateLinkModal"), {
     loading: () => <>loading...</>,
+  }),
+  DeleteLinkModal = dynamic(() => import("components/DeleteLinkModal"), {
+    loading: () => <>loading...</>,
   });
 
 const cardStyle: CSSProperties = { maxWidth: 360, height: 180 };
@@ -35,15 +38,16 @@ export default function LinkCard({
   upvotersId,
   createdAt,
 }: LinkCardPropsType) {
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false),
+    [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [upvote, { error, reset }] = useMutation<
-      Record<"upvote", string>,
-      Record<"linkId", string>
-    >(UPVOTE, {
-      variables: { linkId: id! },
-      refetchQueries: [LINKS, PROFILE, MY_LINKS, MY_UPVOTES],
-    });
+    Record<"upvote", string>,
+    Record<"linkId", string>
+  >(UPVOTE, {
+    variables: { linkId: id! },
+    refetchQueries: [LINKS, PROFILE, MY_LINKS, MY_UPVOTES],
+  });
 
   const authPayload = useReactiveVar(authPayloadVar);
 
@@ -53,6 +57,11 @@ export default function LinkCard({
   return (
     <Card className="mt-4 mb-2 mx-2 p-3 shadow text-center" style={cardStyle}>
       <FeedbackToast error={error} reset={reset} />
+      <DeleteLinkModal
+        id={id!}
+        show={showDeleteModal}
+        setShow={setShowDeleteModal}
+      />
       <UpdateLinkModal
         show={showUpdateModal}
         setShow={setShowUpdateModal}
@@ -69,6 +78,16 @@ export default function LinkCard({
       <div className="mb-3">Shared {days} days ago</div>
       {upvotersId && !upvotersId.includes(authPayload?.sub!) && (
         <Row>
+          <Col>
+            <Button
+              size="sm"
+              variant="outline-danger"
+              className="shadow-lg"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              <BiTrash /> delete
+            </Button>
+          </Col>
           <Col>
             <Button
               size="sm"
