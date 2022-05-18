@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 
+// fragments
 const LINKFIELDS = gql`
   fragment LinkFields on Link {
     id
@@ -15,6 +16,7 @@ const LINKFIELDS = gql`
   }
 `;
 
+// queries
 export const LINKS = gql`
   ${LINKFIELDS}
   query Links($args: PagingInput!) {
@@ -35,48 +37,6 @@ export const LINKS = gql`
 export const LOGIN = gql`
   query Login($email: String!, $password: String!) {
     login(email: $email, password: $password)
-  }
-`;
-
-export const ME = gql`
-  ${LINKFIELDS}
-  query Me($linksArgs: PagingInput!, $upvotedLinksArgs: PagingInput!) {
-    me {
-      id
-      name
-      email
-      totalLinks
-      totalUpvotes
-      links(args: $linksArgs) {
-        edges {
-          node {
-            id
-            headline
-            url
-            userId
-            upvotersId
-            totalUpvotes
-            createdAt
-          }
-        }
-        pageInfo {
-          startCursor
-          hasNextPage
-        }
-      }
-      upvotedLinks(args: $upvotedLinksArgs) {
-        edges {
-          node {
-            ...LinkFields
-          }
-        }
-        pageInfo {
-          startCursor
-          hasNextPage
-        }
-      }
-      createdAt
-    }
   }
 `;
 
@@ -139,6 +99,7 @@ export const MY_UPVOTES = gql`
   }
 `;
 
+// mutations
 export const SIGN_UP = gql`
   mutation Signup($name: String!, $email: String!, $password: String!) {
     signup(email: $email, password: $password, name: $name)
@@ -154,5 +115,11 @@ export const SHARE_LINK = gql`
 export const UPVOTE = gql`
   mutation Upvote($linkId: ID!) {
     upvote(linkId: $linkId)
+  }
+`;
+
+export const UPDATE_LINK = gql`
+  mutation UpdateLink($linkId: ID!, $url: String!, $headline: String!) {
+    updateLink(linkId: $linkId, url: $url, headline: $headline)
   }
 `;

@@ -11,7 +11,14 @@ type UseStateType = {
   setShow: Dispatch<SetStateAction<boolean>>;
 };
 
-type ErrorTypes = "ApolloError" | "UserInputError" | "ValidationError" | "AuthenticationError" | "ForbiddenError" | "SyntaxError" | "Error"
+type ErrorTypes =
+  | "ApolloError"
+  | "UserInputError"
+  | "ValidationError"
+  | "AuthenticationError"
+  | "ForbiddenError"
+  | "SyntaxError"
+  | "Error";
 
 type AudienceType = "user" | "admin";
 
@@ -129,7 +136,15 @@ type PageTitlePropsType = {
 
 type ShareLinkModalPropsType = UseStateType;
 
+type UpdateLinkModalPropsType = UseStateType &
+  LinkInputType &
+  Record<"id", string>;
+
 type ShareLinkFormPropsType = Record<"setShowModal", UseStateType["setShow"]>;
+
+type UpdateLinkFormPropsType = Record<"setShowModal", UseStateType["setShow"]> &
+  LinkInputType &
+  Record<"id", string>;
 
 type AuthComponentType<PropsType = {}> = {
   (PropsType): JSX.Element;
