@@ -43,7 +43,7 @@ export default function LinkSection() {
     <Row className="d-flex justify-content-center">
       <ShareLinkModal show={showModal} setShow={setShowModal} />
       <div className="my-5">
-        <Button onClick={() => setShowModal(true)}>
+        <Button onClick={() => setShowModal(true)} className="shadow">
           <MdAddLink size={35} /> Share Link
         </Button>
       </div>

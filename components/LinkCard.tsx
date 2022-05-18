@@ -69,7 +69,7 @@ export default function LinkCard({
         url={url!}
         headline={headline!}
       />
-      <a href={url} className="text-decoration-none">
+      <a href={url} className="text-decoration-none text-capitalize">
         <Card.Subtitle>{headline}</Card.Subtitle>
       </a>
       <p>

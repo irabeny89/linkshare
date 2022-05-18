@@ -5,7 +5,13 @@ import { MdShare } from "react-icons/md";
 import { FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LinkInputType, ShareLinkFormPropsType } from "types";
-import { LINKS, SHARE_LINK } from "apolloGraphql/client/documentNodes";
+import {
+  LINKS,
+  PROFILE,
+  MY_LINKS,
+  MY_UPVOTES,
+  SHARE_LINK,
+} from "apolloGraphql/client/documentNodes";
 import dynamic from "next/dynamic";
 
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
@@ -32,7 +38,7 @@ export default function ShareLinkForm({
     e.currentTarget.checkValidity()
       ? (shareLink({
           variables: inputs,
-          refetchQueries: [LINKS],
+          refetchQueries: [LINKS, PROFILE, MY_LINKS, MY_UPVOTES],
         }),
         e.currentTarget.reset(),
         setShowModal(false))
@@ -75,6 +81,7 @@ export default function ShareLinkForm({
           aria-label="headline"
         >
           <Form.Control
+            className="text-capitalize"
             required
             placeholder="Headline"
             aria-label="headline"
