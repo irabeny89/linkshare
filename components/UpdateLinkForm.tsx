@@ -26,7 +26,7 @@ export default function UpdateLinkForm({
 }: UpdateLinkFormPropsType) {
   const [validated, setValidated] = useState(false);
 
-  const [updateLink, { loading, error }] = useMutation<
+  const [updateLink, { loading, error, reset }] = useMutation<
     Record<"updateLink", string>,
     LinkInputType & Record<"linkId", string>
   >(UPDATE_LINK);
@@ -51,7 +51,7 @@ export default function UpdateLinkForm({
 
   return (
     <>
-      <FeedbackToast error={error} />
+      <FeedbackToast error={error} reset={reset} />
       <Form
         className="my-3"
         noValidate

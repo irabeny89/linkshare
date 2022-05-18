@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function FeedbackToast({
   error,
+  reset,
 }: FeedbackToastPropsType) {
   const [show, setShow] = useState(false);
   useEffect(() => {
@@ -15,7 +16,12 @@ export default function FeedbackToast({
 
   return (
     <ToastContainer position="bottom-end">
-      <Toast bg="danger" autohide show={show} onClose={() => setShow(false)}>
+      <Toast
+        bg="danger"
+        autohide
+        show={show}
+        onClose={() => (reset && reset(), setShow(false))}
+      >
         <Toast.Header className="justify-content-between">
           {error?.name}
         </Toast.Header>

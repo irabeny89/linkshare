@@ -127,6 +127,7 @@ type LinkCardPropsType = Partial<LinkNodeType>;
 
 type FeedbackToastPropsType = {
   error: any;
+  reset?: () => void;
 };
 
 type PageTitlePropsType = {

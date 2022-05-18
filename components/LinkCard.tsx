@@ -37,7 +37,7 @@ export default function LinkCard({
 }: LinkCardPropsType) {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
-  const [upvote, { error }] = useMutation<
+  const [upvote, { error, reset }] = useMutation<
       Record<"upvote", string>,
       Record<"linkId", string>
     >(UPVOTE, {
@@ -52,7 +52,7 @@ export default function LinkCard({
 
   return (
     <Card className="mt-4 mb-2 mx-2 p-3 shadow text-center" style={cardStyle}>
-      <FeedbackToast error={error} />
+      <FeedbackToast error={error} reset={reset} />
       <UpdateLinkModal
         show={showUpdateModal}
         setShow={setShowUpdateModal}

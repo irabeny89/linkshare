@@ -17,7 +17,7 @@ export default function ShareLinkForm({
 }: ShareLinkFormPropsType) {
   const [validated, setValidated] = useState(false);
 
-  const [shareLink, { loading, error }] = useMutation<
+  const [shareLink, { loading, error, reset }] = useMutation<
     Record<"shareLink", string>,
     LinkInputType
   >(SHARE_LINK);
@@ -43,7 +43,7 @@ export default function ShareLinkForm({
 
   return (
     <>
-      <FeedbackToast error={error} />
+      <FeedbackToast error={error} reset={reset} />
       <Form
         className="my-3"
         noValidate
