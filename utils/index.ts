@@ -160,6 +160,5 @@ export const throwErrorsFor = (error: any, ...errorNames: ErrorTypes[]) => {
 export const handleErrorThrows = (error: any, ...errorNames: ErrorTypes[]) => {
   devlog(error);
   errorNames && throwErrorsFor(error, ...errorNames);
-  // handleErrorInline(error, ApolloError, general);
-  handleErrorInline(error, ApolloError, error?.message);
+  handleErrorInline(error, ApolloError, general);
 };
