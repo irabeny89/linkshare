@@ -36,3 +36,5 @@ debug.log
 
 # vscode debug
 .vscode**
+
+!database/db.sqlite
