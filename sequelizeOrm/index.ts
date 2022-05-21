@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "./database/db.sqlite",
+  storage: "./database/linkshare.sqlite",
 });
 // test database connection
 sequelize.authenticate().then(
