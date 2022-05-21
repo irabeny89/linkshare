@@ -26,7 +26,8 @@ export default function FeedbackToast({
           {error?.name}
         </Toast.Header>
         <Toast.Body className="text-white text-center">
-          {config.siteData.error.client.general}
+          {/* {config.siteData.error.client.general} */}
+          {error.message}
         </Toast.Body>
       </Toast>
     </ToastContainer>
