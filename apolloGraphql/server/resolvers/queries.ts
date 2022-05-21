@@ -85,7 +85,7 @@ const Query = {
 
       return getCursorConnection({ list, ...args });
     } catch (error) {
-      handleErrorThrows(error, "ForbiddenError");
+      handleErrorThrows(error);
     }
   },
 };
