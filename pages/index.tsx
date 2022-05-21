@@ -65,7 +65,7 @@ export default function HomePage() {
             <MdShare color="red" size={300} />
             <div className="text-center display-5">
               <p>No feed yet! Be the first.</p>{" "}
-              {!authPayload?.sub && <Link href="/member">Sign/Login</Link>}
+              {!authPayload?.sub && <Link href="/member">Sign up/Login</Link>}
             </div>
           </>
         )}

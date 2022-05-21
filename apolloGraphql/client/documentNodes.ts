@@ -92,7 +92,7 @@ export const MY_UPVOTES = gql`
         }
         pageInfo {
           startCursor
-          endCursor
+          hasNextPage
         }
       }
     }

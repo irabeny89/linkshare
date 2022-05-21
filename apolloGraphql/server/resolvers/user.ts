@@ -29,21 +29,26 @@ const User = {
         Record<"user", UserRecordType> &
         Record<"totalUpvotes", number> &
         Record<"upvotersId", string[]>)[] = [];
-      for await (const upvote of upvotes) {
-        const link = (
-          await Link.findByPk(upvote.linkId, {
-            include: ["user", "upvotes"],
-          })
-        )?.toJSON() as LinkRecordType &
-          Record<"user", UserRecordType> &
-          Record<"upvotes", Required<UpvoteModelType>[]>;
 
-        delete link.user.hashedPassword, delete link.user.salt;
+      for (const upvote of upvotes) {
+        const link = (
+            await Link.findByPk(upvote.linkId, {
+              include: ["user", "upvotes"],
+            })
+          )?.toJSON() as LinkRecordType &
+            Record<"user", UserRecordType> &
+            Partial<Record<"upvotes", Required<UpvoteModelType>[]>>,
+          totalUpvotes = link.upvotes!.length,
+          upvotersId = link.upvotes!.map(({ userId }) => userId);
+
+        delete link.user.hashedPassword,
+          delete link.user.salt,
+          delete link.upvotes;
 
         list.push({
           ...link,
-          totalUpvotes: link.upvotes.length,
-          upvotersId: link.upvotes.map(({ userId }) => userId),
+          totalUpvotes,
+          upvotersId,
         });
       }
 

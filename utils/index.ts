@@ -1,13 +1,8 @@
 import {
-  CursorConnectionType,
-  EdgeType,
   ErrorTypes,
-  HashType,
-  LinkRecordType,
   PageableNodeType,
   PagingInputType,
   SearchAbleFieldType,
-  UserRecordType,
 } from "types";
 import config from "config";
 import { ApolloError, ForbiddenError } from "apollo-server-micro";
@@ -47,37 +42,62 @@ export const searchList = <T extends SearchAbleFieldType>(
   );
 
 export const getForwardConnection = (
-  list: PageableNodeType[],
+  _list: PageableNodeType[],
   first: number,
   after: string | Date | undefined
 ) => {
-  const afterIndex = list.findIndex(({ createdAt }) => createdAt === after),
-    edges = list.slice(afterIndex + 1, first + afterIndex + 1).map((node) => ({
+  const list = _list.sort(({ createdAt: a }, { createdAt: b }) => +a - +b),
+    afterIndex = list.findIndex(({ createdAt }) => +createdAt + "" === after);
+
+  return {
+    edges: list.slice(afterIndex + 1, first + afterIndex + 1).map((node) => ({
       cursor: node.createdAt,
       node,
     })),
-    startCursor = edges[0]?.node?.createdAt ?? "",
-    endCursor = edges.reverse()[0]?.node?.createdAt ?? "",
-    hasNextPage = list.some((item) => item.createdAt > endCursor),
-    hasPreviousPage = list.some((item) => item.createdAt < startCursor);
-
-  return {
-    edges,
     pageInfo: {
-      startCursor,
-      endCursor,
-      hasNextPage,
-      hasPreviousPage,
+      startCursor:
+        list.slice(afterIndex + 1, first + afterIndex + 1).map((node) => ({
+          cursor: node.createdAt,
+          node,
+        }))[0]?.node?.createdAt ?? new Date(),
+      endCursor:
+        list
+          .slice(afterIndex + 1, first + afterIndex + 1)
+          .map((node) => ({
+            cursor: node.createdAt,
+            node,
+          }))
+          .reverse()[0]?.node?.createdAt ?? new Date(),
+      hasNextPage: list.some(
+        ({ createdAt }) =>
+          createdAt >
+            list
+              .slice(afterIndex + 1, first + afterIndex + 1)
+              .map((node) => ({
+                cursor: node.createdAt,
+                node,
+              }))
+              .reverse()[0]?.node?.createdAt ?? new Date()
+      ),
+      hasPreviousPage: list.some(
+        (item) =>
+          item.createdAt <
+            list.slice(afterIndex + 1, first + afterIndex + 1).map((node) => ({
+              cursor: node.createdAt,
+              node,
+            }))[0]?.node?.createdAt ?? new Date()
+      ),
     },
   };
 };
 
 export const getBackwardConnection = (
-  list: PageableNodeType[],
+  _list: PageableNodeType[],
   last: number,
   before: string | Date | undefined
 ) => {
-  const beforeIndex = list.findIndex((item) => item.createdAt === before),
+  const list = _list.sort(({ createdAt: a }, { createdAt: b }) => +a - +b),
+    beforeIndex = list.findIndex((item) => item.createdAt === before),
     edges = list
       .slice(
         (beforeIndex === -1 ? 0 : beforeIndex) - last,
@@ -87,8 +107,8 @@ export const getBackwardConnection = (
         cursor: node.createdAt,
         node,
       })),
-    startCursor = edges[0]?.node?.createdAt ?? "",
-    endCursor = edges.reverse()[0]?.node?.createdAt ?? "",
+    startCursor = edges[0]?.node?.createdAt ?? new Date(),
+    endCursor = edges.reverse()[0]?.node?.createdAt ?? new Date(),
     hasNextPage = list.some((item) => item.createdAt > endCursor),
     hasPreviousPage = list.some((item) => item.createdAt < startCursor);
 
