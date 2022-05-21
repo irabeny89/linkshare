@@ -37,4 +37,4 @@ debug.log
 # vscode debug
 .vscode**
 
-!database/db.sqlite
+!/database/db.sqlite
