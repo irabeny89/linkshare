@@ -76,7 +76,8 @@ export default function LinkCard({
         {user?.name} | <BiUpvote /> {upvotes}
       </p>
       <div className="mb-3">Shared {days} days ago</div>
-      {upvotersId && !upvotersId.includes(authPayload?.sub!) && (
+
+      {authPayload?.sub && (
         <Row>
           <Col>
             <Button
@@ -98,16 +99,18 @@ export default function LinkCard({
               <BiEditAlt /> update
             </Button>
           </Col>
-          <Col>
-            <Button
-              size="sm"
-              variant="outline-primary"
-              className="shadow-lg"
-              onClick={() => upvote()}
-            >
-              <BiUpvote /> upvote
-            </Button>
-          </Col>
+          {upvotersId && !upvotersId.includes(authPayload?.sub!) && (
+            <Col>
+              <Button
+                size="sm"
+                variant="outline-primary"
+                className="shadow-lg"
+                onClick={() => upvote()}
+              >
+                <BiUpvote /> upvote
+              </Button>
+            </Col>
+          )}
         </Row>
       )}
     </Card>
