@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from "react";
-import Error from "components/Error";
+import ErrorView from "components/ErrorView";
 
 interface Props {
   children: ReactNode;
@@ -29,7 +29,7 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div>
           <h2>Oops, there is an error!</h2>
-          <Error type="500" />
+          <ErrorView type="500" />
           <button
             type="button"
             onClick={() => this.setState({ hasError: false })}

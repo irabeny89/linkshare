@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import { MdAddLink, MdShare, MdMore } from "react-icons/md";
 import { useState } from "react";
 
-const Error = dynamic(() => import("components/Error"), {
+const ErrorView = dynamic(() => import("components/ErrorView"), {
     loading: () => <>loading...</>,
   }),
   ShareLinkModal = dynamic(() => import("components/ShareLinkModal"), {
@@ -49,7 +49,7 @@ export default function LinkSection() {
   return loading ? (
     <Spinner animation="border" />
   ) : error ? (
-    <Error type="500" />
+    <ErrorView type="500" />
   ) : (
     <>
       <FeedbackToast error={error} />

@@ -1,5 +1,5 @@
-import Error from "components/Error";
+import ErrorView from "components/ErrorView";
 
 export default function PageNotFoundErrorPage() {
-  return <Error type="404" />;
+  return <ErrorView type="404" />;
 }

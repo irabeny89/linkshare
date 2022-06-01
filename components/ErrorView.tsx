@@ -3,7 +3,7 @@ import { MdError } from "react-icons/md";
 import config from "config";
 import { ErrorPropsType } from "types";
 
-export default function Error({ type }: ErrorPropsType) {
+export default function ErrorView({ type }: ErrorPropsType) {
   return (
     <Alert variant="danger" className="border-3 text-center display-5">
       <Alert.Heading>

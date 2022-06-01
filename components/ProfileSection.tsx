@@ -4,7 +4,7 @@ import { BiUpvote, BiUser, BiRegistered } from "react-icons/bi";
 import { useQuery } from "@apollo/client";
 import { PROFILE } from "apolloGraphql/client/documentNodes";
 import { UserProfileType } from "types";
-import Error from "./Error";
+import ErrorView from "./ErrorView";
 import { getCompactNumberFormat } from "utils";
 
 export default function ProfileSection() {
@@ -20,7 +20,7 @@ export default function ProfileSection() {
 
   return loading ? (
     error ? (
-      <Error type="500" />
+      <ErrorView type="500" />
     ) : (
       <Spinner animation="border" />
     )

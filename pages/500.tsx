@@ -1,5 +1,5 @@
-import Error from "components/Error";
+import ErrorView from "components/ErrorView";
 
 export default function ServerErrorPage() {
-  return <Error type="500" />;
+  return <ErrorView type="500" />;
 }

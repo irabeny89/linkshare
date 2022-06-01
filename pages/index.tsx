@@ -19,7 +19,7 @@ import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
     loading: () => <>loading...</>,
   }),
-  Error = dynamic(() => import("components/Error"), {
+  ErrorView = dynamic(() => import("components/ErrorView"), {
     loading: () => <>loading...</>,
   });
 
@@ -50,7 +50,7 @@ export default function HomePage() {
       <Row className="my-4 justify-content-center">
         {loading ? (
           error ? (
-            <Error type="500" />
+            <ErrorView type="500" />
           ) : (
             <Spinner animation="border" />
           )

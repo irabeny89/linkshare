@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 import LinkCard from "./LinkCard";
 import { MdMore, MdShare } from "react-icons/md";
 
-const Error = dynamic(() => import("components/Error"), {
+const ErrorView = dynamic(() => import("components/ErrorView"), {
   loading: () => <>loading...</>,
 });
 
@@ -36,7 +36,7 @@ export default function UpvoteSection() {
   return loading ? (
     <Spinner animation="border" />
   ) : error ? (
-    <Error type="500" />
+    <ErrorView type="500" />
   ) : (
     <>
       <Row className="d-flex justify-content-center">
