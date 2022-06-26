@@ -23,7 +23,7 @@ This web app allows registered members to share, edit, upvote & delete links to 
 
 ## :rocket: Deployment
 
-The web app is currently hosted on [Vercel](https://vercel.com) through the link: <https://linkshare-swart.vercel.app>.
+The web app is currently hosted on [Vercel](https://vercel.com) via: <https://linkshare.up.railway.app>.
 
 ## Current & future features
 
