@@ -11,16 +11,13 @@ import User from "./resolvers/user";
 import Link from "./resolvers/link";
 
 const plugins = [
-  process.env.NODE_ENV === "production"
-    ? ApolloServerPluginLandingPageDisabled()
-    : ApolloServerPluginLandingPageGraphQLPlayground(),
-];
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground(),
+  ],
+  resolvers = { Mutation, Query, User, Link },
+  config = { typeDefs, resolvers, context, plugins };
 
-const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers: { Mutation, Query, User, Link },
-  context,
-  plugins,
-});
+const apolloServer = new ApolloServer(config);
 
 export default apolloServer;

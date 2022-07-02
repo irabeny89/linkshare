@@ -4,18 +4,12 @@ import {
   PagingInputType,
   SearchAbleFieldType,
 } from "types";
-import config from "config";
+import { errorMessages, environmentVariables } from "config";
 import { ApolloError, ForbiddenError } from "apollo-server-micro";
 import { JwtPayload } from "jsonwebtoken";
 
-const {
-  environmentVariable: { secret },
-  siteData: {
-    error: {
-      server: { general },
-    },
-  },
-} = config;
+const { secret } = environmentVariables,
+  { server: { server500, forbidden403 } } = errorMessages;
 
 export const getCompactNumberFormat = (value: number = 0) =>
   Intl.NumberFormat("en-US", { notation: "compact" }).format(value);
@@ -148,7 +142,7 @@ export const authenticate = async (accessToken: string | undefined) => {
     });
 
   // throw error if no payload i.e unauthentic
-  handleErrorInline(!payload, ForbiddenError, "Not allowed.");
+  handleErrorInline(!payload, ForbiddenError, forbidden403);
 
   return payload as JwtPayload;
 };
@@ -160,5 +154,5 @@ export const throwErrorsFor = (error: any, ...errorNames: ErrorTypes[]) => {
 export const handleErrorThrows = (error: any, ...errorNames: ErrorTypes[]) => {
   devlog(error);
   errorNames && throwErrorsFor(error, ...errorNames);
-  handleErrorInline(error, ApolloError, general);
+  handleErrorInline(error, ApolloError, server500);
 };

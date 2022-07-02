@@ -1,10 +1,8 @@
 import { createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import config from "config";
+import { siteData } from "config";
 
-const {
-  siteData: { ACCESS_TOKEN_KEY },
-} = config;
+const { ACCESS_TOKEN_KEY } = siteData;
 
 const authLink = setContext((_, { headers }) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY) ?? "";

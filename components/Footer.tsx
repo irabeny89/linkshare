@@ -1,8 +1,8 @@
 import { MdCode } from "react-icons/md";
-import config from "config";
-const {
-  siteData: { author, email },
-} = config;
+import { siteData } from "config";
+
+const { author, email } = siteData;
+
 export default function Footer() {
   return (
     <footer className="text-center">

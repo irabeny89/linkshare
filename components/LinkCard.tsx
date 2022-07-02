@@ -49,10 +49,16 @@ export default function LinkCard({
     refetchQueries: [LINKS, PROFILE, MY_LINKS, MY_UPVOTES],
   });
 
-  const authPayload = useReactiveVar(authPayloadVar);
-
-  const upvotes = getCompactNumberFormat(totalUpvotes),
-    days = getCompactNumberFormat(new Date(+createdAt!).getDay());
+  const authPayload = useReactiveVar(authPayloadVar),
+    isPermitted = authPayload?.sub === user?.id,
+    showUpdateButton =
+      isPermitted && upvotersId && !upvotersId.includes(authPayload?.sub!),
+    upvotes = getCompactNumberFormat(totalUpvotes),
+    days = getCompactNumberFormat(
+      Math.floor((Date.now() - +createdAt!) / 864e5)
+    ),
+    datePhrase =
+      +days < 1 ? "Shared today" : `Shared ${days} day${+days > 1 ? "s" : ""} ago`;
 
   return (
     <Card className="mt-4 mb-2 mx-2 p-3 shadow text-center" style={cardStyle}>
@@ -75,9 +81,9 @@ export default function LinkCard({
       <p>
         {user?.name} | <BiUpvote /> {upvotes}
       </p>
-      <div className="mb-3">Shared {days} days ago</div>
+      <div className="mb-3">{datePhrase}</div>
 
-      {authPayload?.sub && (
+      {isPermitted && (
         <Row>
           <Col>
             <Button
@@ -99,7 +105,7 @@ export default function LinkCard({
               <BiEditAlt /> update
             </Button>
           </Col>
-          {upvotersId && !upvotersId.includes(authPayload?.sub!) && (
+          {showUpdateButton && (
             <Col>
               <Button
                 size="sm"

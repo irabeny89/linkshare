@@ -1,7 +1,9 @@
 import { Alert } from "react-bootstrap";
 import { MdError } from "react-icons/md";
-import config from "config";
+import { errorMessages } from "config";
 import { ErrorPropsType } from "types";
+
+const { pageNotFound404, serverDown500 } = errorMessages.client;
 
 export default function ErrorView({ type }: ErrorPropsType) {
   return (
@@ -10,8 +12,8 @@ export default function ErrorView({ type }: ErrorPropsType) {
         {type === "404" && <>4xx - Client Error</>}
         {type === "500" && <>5xx - Server Error</>}
       </Alert.Heading>
-      {type === "404" && <p>{config.siteData.error.client.pageNotFound}</p>}
-      {type === "500" && <p>{config.siteData.error.client.serverDown}</p>}
+      {type === "404" && <p>{pageNotFound404}</p>}
+      {type === "500" && <p>{serverDown500}</p>}
       <MdError size={100} />
     </Alert>
   );

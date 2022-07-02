@@ -1,8 +1,10 @@
 import ToastContainer from "react-bootstrap/ToastContainer";
 import Toast from "react-bootstrap/Toast";
-import config from "config";
+import { errorMessages } from "config";
 import { FeedbackToastPropsType } from "types";
 import { useEffect, useState } from "react";
+
+const { general } = errorMessages.client
 
 export default function FeedbackToast({
   error,
@@ -26,7 +28,7 @@ export default function FeedbackToast({
           {error?.name}
         </Toast.Header>
         <Toast.Body className="text-white text-center">
-          {config.siteData.error.client.general}
+          {general}
         </Toast.Body>
       </Toast>
     </ToastContainer>

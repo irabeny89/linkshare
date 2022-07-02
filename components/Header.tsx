@@ -1,15 +1,13 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { MdShare } from "react-icons/md";
-import config from "config";
+import { siteData } from "config";
 import Link from "next/link";
 import { useReactiveVar } from "@apollo/client";
 import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
 import { useState, useEffect } from "react";
 
-const {
-  siteData: { name, pages },
-} = config;
+const { name, pages } = siteData;
 
 export default function Header() {
   const [permittedData, setPermittedData] = useState<typeof pages>([]);

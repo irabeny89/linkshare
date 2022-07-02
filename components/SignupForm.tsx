@@ -6,11 +6,9 @@ import { useMutation } from "@apollo/client";
 import { SIGN_UP } from "apolloGraphql/client/documentNodes";
 import { SignupInputType } from "types";
 import { useRouter } from "next/router";
-import config from "config";
+import { siteData } from "config";
 
-const {
-  siteData: { ACCESS_TOKEN_KEY },
-} = config;
+const { ACCESS_TOKEN_KEY } = siteData;
 
 export default function SignupForm() {
   const [validated, setValidated] = useState(false),

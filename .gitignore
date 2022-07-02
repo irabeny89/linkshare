@@ -36,3 +36,6 @@ debug.log
 
 # vscode debug
 .vscode**
+
+# local db 
+database/

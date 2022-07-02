@@ -6,15 +6,13 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "apolloGraphql/client/index";
 import ErrorBoundary from "components/ErrorBoundary";
 import { useEffect, useState } from "react";
-import config from "config";
+import { siteData } from "config";
 import { decode } from "jsonwebtoken";
 import ForbiddenAlert from "components/ForbiddenAlert";
 import { AuthPayloadType } from "types";
 import { authPayloadVar } from "apolloGraphql/client/reactiveVars";
 
-const {
-  siteData: { ACCESS_TOKEN_KEY },
-} = config;
+const { ACCESS_TOKEN_KEY } = siteData;
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isAuth, setIsAuth] = useState(false);
@@ -33,8 +31,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [Component?.audiences]);
 
   return (
-    <SSRProvider>
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <SSRProvider>
         <ApolloProvider client={apolloClient}>
           <Layout>
             {Component.displayName === "dashboard" ? (
@@ -48,8 +46,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             )}
           </Layout>
         </ApolloProvider>
-      </ErrorBoundary>
-    </SSRProvider>
+      </SSRProvider>
+    </ErrorBoundary>
   );
 }
 export default MyApp;

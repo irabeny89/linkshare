@@ -36,7 +36,7 @@ export default function LinkSection() {
   const links =
     data?.me?.links?.edges.map(({ node }) => ({
       ...node,
-      user: { name: "Me" },
+      user: { name: "Me", id: data.me.id },
     })) ?? [];
 
   const handleMoreLinks = () =>

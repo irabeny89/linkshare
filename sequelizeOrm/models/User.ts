@@ -4,8 +4,10 @@ import { sign } from "jsonwebtoken";
 import { LinkModelType, UpvoteModelType, UserModelType } from "types";
 import Link from "./Link";
 import Upvote from "./Upvote";
-import config from "config";
+import { environmentVariables } from "config";
 import { randomBytes, createHmac, timingSafeEqual } from "crypto";
+
+const { secret } = environmentVariables;
 
 class User extends Model<UserModelType> {
   name!: string;
@@ -17,11 +19,14 @@ class User extends Model<UserModelType> {
   upvotes!: Required<UpvoteModelType>[];
   salt!: string;
   async getAccessToken() {
-    return sign({ email: this.email }, config.environmentVariable.secret, {
-      audience: "user",
-      expiresIn: "30d",
-      subject: this.id,
-    });
+    const { id: subject, email } = this,
+      jwtOptions = {
+        audience: "user",
+        expiresIn: "30d",
+        subject,
+      };
+
+    return sign({ email }, secret, jwtOptions);
   }
   isValidPassword(password: string) {
     const hash = createHmac("sha256", this.salt).update(password).digest("hex");

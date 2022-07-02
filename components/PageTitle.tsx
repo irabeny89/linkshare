@@ -1,13 +1,11 @@
 import Button from "react-bootstrap/Button";
 import Head from "next/head";
 import { PageTitlePropsType } from "types";
-import config from "config";
+import {siteData} from "config";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-const {
-  siteData: { ACCESS_TOKEN_KEY },
-} = config;
+const { ACCESS_TOKEN_KEY } = siteData;
 
 export default function PageTitle({ title, icon }: PageTitlePropsType) {
   const [hasAccess, setHasAccess] = useState(false);

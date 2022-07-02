@@ -1,4 +1,3 @@
-import { Fade } from "react-bootstrap";
 import { Model, DataTypes } from "sequelize";
 import sequelize from "sequelizeOrm";
 import { LinkInputType, LinkModelType } from "types";

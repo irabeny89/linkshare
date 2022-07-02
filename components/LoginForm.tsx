@@ -7,11 +7,9 @@ import { LOGIN } from "apolloGraphql/client/documentNodes";
 import { LoginInputType } from "types";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import config from "config";
+import { siteData } from "config";
 
-const {
-  siteData: { ACCESS_TOKEN_KEY },
-} = config;
+const { ACCESS_TOKEN_KEY } = siteData;
 
 const FeedbackToast = dynamic(() => import("components/FeedBackToast"), {
   loading: () => <>loading...</>,

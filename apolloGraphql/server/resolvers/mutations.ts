@@ -1,4 +1,8 @@
-import { UserInputError, ValidationError } from "apollo-server-micro";
+import {
+  ForbiddenError,
+  UserInputError,
+  ValidationError,
+} from "apollo-server-micro";
 import { GraphContextType, LinkInputType, SignupInputType } from "types";
 import {
   authenticate,
@@ -6,6 +10,9 @@ import {
   handleErrorInline,
   handleErrorThrows,
 } from "utils/";
+import { errorMessages } from "config";
+
+const { forbidden403 } = errorMessages.server;
 
 const Mutation = {
   signup: async (_: any, args: SignupInputType, { User }: GraphContextType) => {
@@ -35,6 +42,7 @@ const Mutation = {
       return `Link shared with id ${id}.`;
     } catch (error: any) {
       const validationError = error.errors[0];
+
       handleErrorInline(
         validationError,
         ValidationError,
@@ -49,10 +57,11 @@ const Mutation = {
     { Upvote, accessToken }: GraphContextType
   ) => {
     try {
-      const { sub: userId } = await authenticate(accessToken),
-        upvoted = await Upvote.findOne({
-          where: { linkId, userId },
-        });
+      const { sub: userId } = await authenticate(accessToken);
+
+      const upvoted = await Upvote.findOne({
+        where: { linkId, userId },
+      });
 
       handleErrorInline(upvoted, Error, "Upvoted before; cannot upvote twice.");
 
@@ -70,9 +79,11 @@ const Mutation = {
     { Link, accessToken }: GraphContextType
   ) => {
     try {
-      await authenticate(accessToken);
+      const { sub: userId } = await authenticate(accessToken);
 
-      await Link.destroy({ where: { id } });
+      const deletedRows = await Link.destroy({ where: { userId, id } });
+
+      handleErrorInline(!deletedRows, ForbiddenError, forbidden403);
 
       return `Link with id ${id} deleted successfully.`;
     } catch (error) {
@@ -81,13 +92,22 @@ const Mutation = {
   },
   updateLink: async (
     _: any,
-    { headline, url, linkId: id }: Record<"linkId" | "url" | "headline", string>,
+    {
+      headline,
+      url,
+      linkId: id,
+    }: Record<"linkId" | "url" | "headline", string>,
     { Link, accessToken }: GraphContextType
   ) => {
     try {
-      await authenticate(accessToken);
+      const { sub: userId } = await authenticate(accessToken);
 
-      await Link.update({ headline, url, id }, { where: { id } });
+      const [updatedRows] = await Link.update(
+        { headline, url, id },
+        { where: { userId, id } }
+      );
+
+      handleErrorInline(!updatedRows, ForbiddenError, forbidden403);
 
       return `Link with id ${id} updated successfully.`;
     } catch (error) {
